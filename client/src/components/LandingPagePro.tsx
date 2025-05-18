@@ -8,6 +8,8 @@ import { methods, featuredMethod } from "@/data/methods";
 const LandingPagePro = () => {
   const [showMethods, setShowMethods] = useState(false);
   const [plano, setPlano] = useState('197');
+  const [pixCode, setPixCode] = useState('');
+  const [showPayment, setShowPayment] = useState(false);
 
   const handleRevealMethods = () => {
     setShowMethods(true);
@@ -20,11 +22,13 @@ const LandingPagePro = () => {
   };
 
   const handlePayment = (price: string) => {
-    const pixCode = price === '197'
+    const code = price === '197'
       ? '00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com5204000053039865404197.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD'
       : '00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com520400005303986540464.905802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD';
-
-    window.open(`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCode)}`, '_blank');
+    
+    setPixCode(code);
+    setShowPayment(true);
+    window.open(`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(code)}`, '_blank');
   };
 
   return (
