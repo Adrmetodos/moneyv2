@@ -229,13 +229,33 @@ const LandingPagePro = () => {
               </div>
 
               <Button 
-                className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 w-full md:w-auto rounded-full text-lg shadow-lg transform transition-all duration-300 hover:scale-105 animate-pulse"
+                className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 w-full md:w-auto rounded-full text-lg shadow-lg transform transition-all duration-300 hover:scale-105 animate-pulse mb-6"
                 onClick={() => handlePayment(plano)}
               >
                 QUERO TER ACESSO AGORA
               </Button>
 
-              
+              <div className="bg-gray-800 p-6 rounded-xl text-center mb-6">
+                <h3 className="text-xl font-bold mb-4">Copiar código PIX</h3>
+                <div className="bg-gray-700 p-4 rounded-lg mb-4">
+                  <input
+                    type="text"
+                    value="00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com5204000053039865404197.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD"
+                    readOnly
+                    className="w-full bg-gray-600 text-white p-2 rounded text-sm"
+                    onClick={(e) => (e.target as HTMLInputElement).select()}
+                  />
+                </div>
+                <Button
+                  onClick={() => {
+                    navigator.clipboard.writeText("00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com5204000053039865404197.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD");
+                    alert("Código PIX copiado!");
+                  }}
+                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full"
+                >
+                  Copiar código PIX
+                </Button>
+              </div>
 
               <div className="mt-4 flex justify-center space-x-4 text-sm text-gray-400">
                 <span className="flex items-center">
