@@ -3,7 +3,15 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 const PagamentoPix = () => {
-  const [pixCode, setPixCode] = useState("00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com52040000530398654041.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD");
+  const [plano, setPlano] = useState('197');
+  
+  const handlePayment = () => {
+    const pixCode = plano === '197' 
+      ? '00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com5204000053039865404197.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD'
+      : '00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com520400005303986540464.905802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD';
+    
+    window.open(`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCode)}`, '_blank');
+  };
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
