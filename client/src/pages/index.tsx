@@ -1,8 +1,6 @@
-// 🔥 LANDING PAGE COMPLETA 🔥
-
 import '../styles/globals.css';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'
 import Head from 'next/head';
 
 const LandingPagePro = () => {
@@ -87,4 +85,4 @@ const LandingPagePro = () => {
 
 export default LandingPagePro;
 
-// 🔥 FIM DO CÓDIGO COMPLETO
+
