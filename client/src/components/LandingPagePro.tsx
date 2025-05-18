@@ -8,8 +8,7 @@ import { methods, featuredMethod } from "@/data/methods";
 const LandingPagePro = () => {
   const [showMethods, setShowMethods] = useState(false);
   const [plano, setPlano] = useState('197');
-  const [pixCode, setPixCode] = useState('');
-  const [showPayment, setShowPayment] = useState(false);
+  
 
   const handleRevealMethods = () => {
     setShowMethods(true);
@@ -22,13 +21,8 @@ const LandingPagePro = () => {
   };
 
   const handlePayment = (price: string) => {
-    const code = price === '197'
-      ? '00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com5204000053039865404197.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD'
-      : '00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com520400005303986540464.905802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD';
-    
-    setPixCode(code);
-    setShowPayment(true);
-    window.open(`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(code)}`, '_blank');
+    // Payment handling logic will be implemented later
+    console.log('Payment initiated for:', price);
   };
 
   return (
@@ -239,38 +233,7 @@ const LandingPagePro = () => {
                 QUERO TER ACESSO AGORA
               </Button>
 
-              {showPayment && (
-                <div className="bg-gray-800 p-6 rounded-xl text-center mt-6">
-                  <h2 className="text-2xl font-bold text-white mb-4">Pagamento PIX</h2>
-                  
-                  <img
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCode)}`}
-                    alt="QR Code de Pagamento"
-                    className="mx-auto mb-4"
-                  />
-
-                  <div className="bg-gray-700 text-white p-4 rounded-lg mb-4">
-                    <p className="mb-2">Copia e Cola:</p>
-                    <input
-                      type="text"
-                      value={pixCode}
-                      readOnly
-                      className="bg-gray-600 text-white w-full p-2 rounded-lg outline-none"
-                      onClick={(e) => e.target.select()}
-                    />
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(pixCode);
-                      alert("Código copiado para a área de transferência!");
-                    }}
-                    className="bg-green-600 text-white px-8 py-4 hover:bg-green-700 text-xl rounded-full animate-pulse"
-                  >
-                    COPIAR CÓDIGO
-                  </button>
-                </div>
-              )}
+              
 
               <div className="mt-4 flex justify-center space-x-4 text-sm text-gray-400">
                 <span className="flex items-center">
