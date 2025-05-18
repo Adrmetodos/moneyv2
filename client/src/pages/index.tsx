@@ -58,17 +58,49 @@ const LandingPagePro = () => {
           ))}
 
           <h2 className='text-2xl font-bold mt-10'>Escolha o seu plano:</h2>
-          <select onChange={(e) => setPlano(e.target.value)} className='bg-gray-800 text-white p-4 rounded-lg mb-6 mt-4'>
-            <option value='197'>R$ 197,00 - Todos os métodos</option>
-            <option value='64.90'>R$ 64,90 - Apenas 1 método</option>
-          </select>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+            {/* 🔥 PLANO COMPLETO — R$197 */}
+            <div className="bg-gray-800 p-6 rounded-xl text-center mb-4 border-2 border-green-500">
+              <div className="text-5xl font-extrabold text-green-400 mb-2 animate-pulse">
+                Por apenas R$197
+              </div>
+              <div className="text-xl text-gray-400">
+                Ou <span className="text-green-300 font-bold">12x de R$19,70</span> sem juros
+              </div>
+              <div className="mt-4">
+                <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm">
+                  🔥 Oferta Limitada!
+                </span>
+              </div>
+              <button
+                onClick={() => handlePayment('197')}
+                className="bg-green-600 text-white px-8 py-4 mt-4 hover:bg-green-700 text-xl rounded-full animate-pulse"
+              >
+                COMPRAR AGORA
+              </button>
+            </div>
 
-          <button
-            onClick={handlePayment}
-            className='bg-green-600 text-white px-8 py-4 hover:bg-green-700 text-xl rounded-full animate-pulse'
-          >
-            PAGAR AGORA
-          </button>
+            {/* 🔥 PLANO SIMPLES — R$64,90 */}
+            <div className="bg-gray-800 p-6 rounded-xl text-center mb-4 border-2 border-blue-500">
+              <div className="text-5xl font-extrabold text-blue-400 mb-2 animate-pulse">
+                Por apenas R$64,90
+              </div>
+              <div className="text-xl text-gray-400">
+                Ou <span className="text-blue-300 font-bold">3x de R$21,63</span> sem juros
+              </div>
+              <div className="mt-4">
+                <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm">
+                  🔥 Acesso Imediato!
+                </span>
+              </div>
+              <button
+                onClick={() => handlePayment('64.90')}
+                className="bg-blue-600 text-white px-8 py-4 mt-4 hover:bg-blue-700 text-xl rounded-full animate-pulse"
+              >
+                COMPRAR AGORA
+              </button>
+            </div>
+          </div>
 
           <a
             href='https://wa.me/+556293555185?text=Tenho%20dúvidas%20sobre%20o%20pagamento.'
