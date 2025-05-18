@@ -234,10 +234,43 @@ const LandingPagePro = () => {
 
               <Button 
                 className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 w-full md:w-auto rounded-full text-lg shadow-lg transform transition-all duration-300 hover:scale-105 animate-pulse"
-                onClick={() => window.location.href = "/pagamento"}
+                onClick={() => handlePayment(plano)}
               >
                 QUERO TER ACESSO AGORA
               </Button>
+
+              {showPayment && (
+                <div className="bg-gray-800 p-6 rounded-xl text-center mt-6">
+                  <h2 className="text-2xl font-bold text-white mb-4">Pagamento PIX</h2>
+                  
+                  <img
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCode)}`}
+                    alt="QR Code de Pagamento"
+                    className="mx-auto mb-4"
+                  />
+
+                  <div className="bg-gray-700 text-white p-4 rounded-lg mb-4">
+                    <p className="mb-2">Copia e Cola:</p>
+                    <input
+                      type="text"
+                      value={pixCode}
+                      readOnly
+                      className="bg-gray-600 text-white w-full p-2 rounded-lg outline-none"
+                      onClick={(e) => e.target.select()}
+                    />
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(pixCode);
+                      alert("Código copiado para a área de transferência!");
+                    }}
+                    className="bg-green-600 text-white px-8 py-4 hover:bg-green-700 text-xl rounded-full animate-pulse"
+                  >
+                    COPIAR CÓDIGO
+                  </button>
+                </div>
+              )}
 
               <div className="mt-4 flex justify-center space-x-4 text-sm text-gray-400">
                 <span className="flex items-center">
