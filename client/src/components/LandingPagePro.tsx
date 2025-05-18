@@ -21,8 +21,10 @@ const LandingPagePro = () => {
   };
 
   const handlePayment = (price: string) => {
-    // Payment handling logic will be implemented later
-    console.log('Payment initiated for:', price);
+    const pixCode = price === '197' 
+      ? '00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com5204000053039865404197.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD'
+      : '00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com520400005303986540464.905802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD';
+    window.open(`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCode)}`, '_blank');
   };
 
   return (
