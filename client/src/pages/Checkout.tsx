@@ -98,9 +98,17 @@ export default function Checkout() {
   useEffect(() => {
     const createPaymentIntent = async () => {
       try {
+        // Identifica se o código está rodando na Vercel
+        const isVercel = typeof window !== 'undefined' && window.location.hostname.includes('vercel.app');
+        
+        // Se estiver na Vercel e usar API serverless, ajuste o caminho da API
+        let apiPath = "/api/create-payment-intent";
+        
+        console.log("Enviando requisição para:", apiPath);
+        
         const response = await apiRequest(
           "POST", 
-          "/api/create-payment-intent", 
+          apiPath, 
           { amount: valor, plano }
         );
         
@@ -108,7 +116,9 @@ export default function Checkout() {
         
         if (data.clientSecret) {
           setClientSecret(data.clientSecret);
+          console.log("Recebido clientSecret com sucesso");
         } else {
+          console.error("Resposta sem clientSecret:", data);
           toast({
             title: "Erro",
             description: "Não foi possível iniciar o processo de pagamento.",
@@ -119,7 +129,7 @@ export default function Checkout() {
         console.error("Erro ao criar payment intent:", error);
         toast({
           title: "Erro",
-          description: "Falha na comunicação com o servidor de pagamentos.",
+          description: "Falha na comunicação com o servidor de pagamentos. Tente novamente mais tarde.",
           variant: "destructive",
         });
       }

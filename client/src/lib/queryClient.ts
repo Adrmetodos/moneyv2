@@ -12,7 +12,16 @@ export async function apiRequest(
   url: string,
   data?: unknown | undefined,
 ): Promise<Response> {
-  const res = await fetch(url, {
+  // Ajusta a URL para garantir compatibilidade com Vercel
+  let apiUrl = url;
+  
+  // Se estamos em produção na Vercel e a URL começa com /api
+  if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app') && url.startsWith('/api')) {
+    // Usa a URL base atual para as chamadas de API
+    apiUrl = `${window.location.origin}${url}`;
+  }
+  
+  const res = await fetch(apiUrl, {
     method,
     headers: data ? { "Content-Type": "application/json" } : {},
     body: data ? JSON.stringify(data) : undefined,
