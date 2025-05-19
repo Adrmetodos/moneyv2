@@ -89,7 +89,8 @@ const LandingPagePro = () => {
         incrementarClique6490();
       }
       
-      const response = await fetch('/api/checkout', {
+      // Use a rota de pagamento correta
+      const response = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,20 +100,33 @@ const LandingPagePro = () => {
 
       console.log("Resposta recebida:", response.status);
       
-      const data = await response.json();
-      console.log("Dados recebidos:", data);
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
       
-      if (data.url) {
-        console.log("Redirecionando para:", data.url);
-        // Abrir em nova janela em vez de redirecionar
-        window.open(data.url, '_blank');
-      } else {
-        console.error("Erro: URL de checkout não encontrada na resposta");
-        alert("Erro ao gerar pagamento! Detalhes no console.");
+      // Processar a resposta com tratamento adequado
+      const respText = await response.text();
+      
+      try {
+        // Tenta analisar o texto da resposta como JSON
+        const data = JSON.parse(respText);
+        console.log("Dados recebidos:", data);
+        
+        if (data.url) {
+          console.log("Redirecionando para:", data.url);
+          // Abrir em nova janela em vez de redirecionar
+          window.open(data.url, '_blank');
+        } else {
+          console.error("Erro: URL de checkout não encontrada na resposta", data);
+          alert("Erro ao gerar pagamento! Verifique seu conexão e tente novamente.");
+        }
+      } catch (parseError) {
+        console.error("Erro ao analisar resposta:", parseError, "Texto da resposta:", respText);
+        alert("Erro ao processar a resposta do servidor. Tente novamente mais tarde.");
       }
     } catch (error) {
       console.error("Erro ao processar pagamento:", error);
-      alert("Erro ao processar o pagamento. Verifique o console para mais detalhes.");
+      alert("Erro ao processar o pagamento. Tente novamente mais tarde.");
     }
   };
   
