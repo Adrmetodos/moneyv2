@@ -272,6 +272,16 @@ const LandingPagePro = () => {
             <div className="bg-red-700 text-white p-4 rounded-xl text-center mt-4 mb-8 animate-pulse">
               🔥 <strong>VAGAS LIMITADAS!</strong> Apenas 5 acessos disponíveis para hoje! Não perca!
             </div>
+
+            {/* WhatsApp Capture Form */}
+            <motion.div 
+              className="w-full mb-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <WhatsappCapture />
+            </motion.div>
             
             {/* Final CTA */}
             <motion.div 
