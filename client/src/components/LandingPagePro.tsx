@@ -78,6 +78,34 @@ const LandingPagePro = () => {
     window.location.href = `/pagamento?codigo=${encodeURIComponent(pixCode)}&valor=${valorFormatado}&plano=${tipoPlano}`;
   };
   
+  const handleStripePayment = async (valor: string) => {
+    try {
+      // Registrar clique no plano correspondente
+      if (valor === '19700') {
+        incrementarClique197();
+      } else {
+        incrementarClique6490();
+      }
+      
+      const response = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ valor }),
+      });
+
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert("Erro ao gerar pagamento!");
+      }
+    } catch (error) {
+      console.error("Erro ao processar pagamento:", error);
+    }
+  };
+  
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (email !== "") {
@@ -360,11 +388,27 @@ const LandingPagePro = () => {
               </div>
               
               <Button 
-                className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 w-full md:w-auto rounded-full text-lg shadow-lg transform transition-all duration-300 hover:scale-105 animate-pulse"
+                className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 w-full md:w-auto rounded-full text-lg shadow-lg transform transition-all duration-300 hover:scale-105 animate-pulse mb-6"
                 onClick={handlePayment}
               >
-                QUERO TER ACESSO AGORA
+                QUERO TER ACESSO COM PIX
               </Button>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <Button
+                  onClick={() => handleStripePayment('19700')}
+                  className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg rounded-full shadow-lg transform transition-all hover:scale-105"
+                >
+                  PAGAR COM CARTÃO - R$197,00
+                </Button>
+
+                <Button
+                  onClick={() => handleStripePayment('6490')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg rounded-full shadow-lg transform transition-all hover:scale-105"
+                >
+                  PAGAR COM CARTÃO - R$64,90
+                </Button>
+              </div>
               
               <div className="mt-4 flex justify-center space-x-4 text-sm text-gray-400">
                 <span className="flex items-center">

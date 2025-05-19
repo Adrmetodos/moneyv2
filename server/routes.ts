@@ -7,27 +7,28 @@ if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2023-10-16",
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Rota para criar sessão de checkout do Stripe
-  app.post("/api/create-checkout-session", async (req: Request, res: Response) => {
-    const { valor, plano } = req.body;
+  app.post("/api/create-checkout", async (req: Request, res: Response) => {
+    const { valor } = req.body;
     
     try {
+      // Converter o valor para número inteiro (centavos)
+      const valorInteiro = parseInt(valor);
+      
       const session = await stripe.checkout.sessions.create({
-        payment_method_types: ["card", "pix"],
+        payment_method_types: ["card", "boleto", "pix"],
         line_items: [
           {
             price_data: {
               currency: "brl",
               product_data: {
-                name: plano === "premium" ? "Métodos Infalíveis - Plano Premium" : "Métodos Infalíveis - Plano Básico",
-                description: plano === "premium" ? "Acesso a todos os 10 métodos infalíveis para ganhar dinheiro" : "Acesso aos métodos básicos para ganhar dinheiro"
+                name: valorInteiro === 19700 ? "Métodos Infalíveis - Plano Premium" : "Métodos Infalíveis - Plano Básico",
+                description: valorInteiro === 19700 ? "Acesso a todos os 10 métodos infalíveis para ganhar dinheiro" : "Acesso aos métodos básicos para ganhar dinheiro"
               },
-              unit_amount: parseInt(valor) * 100, // Valor em centavos
+              unit_amount: valorInteiro, // Valor em centavos
             },
             quantity: 1,
           },
@@ -39,6 +40,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.status(200).json({ url: session.url });
     } catch (error: any) {
+      console.error("Erro ao criar sessão de checkout:", error);
       res.status(500).json({ error: error.message });
     }
   });
