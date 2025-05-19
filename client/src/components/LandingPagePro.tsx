@@ -80,6 +80,8 @@ const LandingPagePro = () => {
   
   const handleStripePayment = async (valor: string) => {
     try {
+      console.log("Iniciando pagamento com Stripe...", valor);
+      
       // Registrar clique no plano correspondente
       if (valor === '19700') {
         incrementarClique197();
@@ -95,14 +97,21 @@ const LandingPagePro = () => {
         body: JSON.stringify({ valor }),
       });
 
+      console.log("Resposta recebida:", response.status);
+      
       const data = await response.json();
+      console.log("Dados recebidos:", data);
+      
       if (data.url) {
+        console.log("Redirecionando para:", data.url);
         window.location.href = data.url;
       } else {
-        alert("Erro ao gerar pagamento!");
+        console.error("Erro: URL de checkout não encontrada na resposta");
+        alert("Erro ao gerar pagamento! Detalhes no console.");
       }
     } catch (error) {
       console.error("Erro ao processar pagamento:", error);
+      alert("Erro ao processar o pagamento. Verifique o console para mais detalhes.");
     }
   };
   
