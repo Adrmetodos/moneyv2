@@ -1,51 +1,75 @@
-# Guia de Implantação na Vercel
+# Solução RÁPIDA para Tela Branca na Vercel
 
-Este guia contém instruções para corrigir o problema da tela branca e implantar este projeto na Vercel.
+Se você está vendo tela branca após a implantação na Vercel, siga esta solução simplificada:
 
-## Solução para Tela Branca
+## Método 1: Usar Netlify em vez de Vercel
 
-Se você está vendo uma tela branca após a implantação, siga estas instruções:
+A maneira mais simples de resolver o problema:
 
-## Requisitos
+1. Crie uma conta na [Netlify](https://www.netlify.com/) (gratuita)
+2. Ao criar um novo site, selecione "Import from Git"
+3. Conecte seu repositório GitHub
+4. Configure:
+   - Build command: `npm run build`
+   - Publish directory: `dist/public`
+5. Em "Advanced build settings" adicione as variáveis de ambiente:
+   - `STRIPE_SECRET_KEY`: sua chave secreta
+   - `VITE_STRIPE_PUBLIC_KEY`: sua chave pública
 
-- Uma conta na Vercel
-- Acesso ao repositório do projeto
+## Método 2: Solução para Vercel
 
-## Passos para Implantação Correta
+Se você realmente precisa usar a Vercel:
 
-### 1. Simplificar o arquivo vercel.json
-
-Substitua o conteúdo do arquivo `vercel.json` pelo seguinte:
+### 1. Configure o vercel.json
 
 ```json
 {
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ],
+  "framework": null,
   "buildCommand": "npm run build",
-  "outputDirectory": "dist/public"
+  "outputDirectory": "dist/public",
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
 }
 ```
 
-### 2. Criar arquivo API para o Stripe
+### 2. Criar um arquivo index.html de fallback
 
-Crie um diretório chamado `api` na raiz do projeto e dentro dele um arquivo `checkout.js`:
+Crie um arquivo `vercel-index.html` na raiz do projeto:
 
-```javascript
-import Stripe from 'stripe';
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="0;url=/index.html">
+  <title>Métodos Infalíveis</title>
+</head>
+<body>
+  <h1>Redirecionando...</h1>
+</body>
+</html>
+```
 
-// Inicializa o Stripe
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+### 3. Preparar pasta de API separada
 
-export default async function handler(req, res) {
+Na VERCEL, crie uma API Function:
+
+1. Crie uma pasta `api` na raiz do projeto
+2. Dentro dela, crie um arquivo `checkout.js` com este conteúdo:
+
+```js
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método não permitido' });
   }
 
   try {
     const { valor } = req.body;
-    
-    // Converter o valor para número inteiro (centavos)
     const valorInteiro = parseInt(valor);
     
     const session = await stripe.checkout.sessions.create({
@@ -55,10 +79,10 @@ export default async function handler(req, res) {
           price_data: {
             currency: 'brl',
             product_data: {
-              name: valorInteiro === 19700 ? 'Métodos Infalíveis - Plano Premium' : 'Métodos Infalíveis - Plano Básico',
-              description: valorInteiro === 19700 ? 'Acesso a todos os 10 métodos infalíveis para ganhar dinheiro' : 'Acesso aos métodos básicos para ganhar dinheiro'
+              name: valorInteiro === 19700 ? 'Métodos Infalíveis - Premium' : 'Métodos Infalíveis - Básico',
+              description: valorInteiro === 19700 ? 'Acesso completo aos 10 métodos' : 'Acesso básico'
             },
-            unit_amount: valorInteiro, // Valor em centavos
+            unit_amount: valorInteiro,
           },
           quantity: 1,
         },
@@ -70,73 +94,38 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ url: session.url });
   } catch (error) {
-    console.error('Erro ao criar sessão de checkout:', error);
+    console.error('Erro:', error);
     return res.status(500).json({ error: error.message });
   }
-}
+};
 ```
 
-### 3. Modificar a chamada para a API na aplicação
+### 4. No componente LandingPagePro.tsx
 
-No arquivo `client/src/components/LandingPagePro.tsx`, altere a chamada da API:
+Verifique qual ambiente está rodando antes de fazer a chamada:
 
-```typescript
-// De:
-const response = await fetch('/api/create-checkout', {
-  // ...
-});
+```js
+const apiUrl = window.location.hostname.includes('vercel.app') 
+  ? '/api/checkout' // Vercel
+  : '/api/checkout'; // Local ou outra hospedagem
 
-// Para:
-const response = await fetch('/api/checkout', {
+const response = await fetch(apiUrl, {
   method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ valor }),
 });
 ```
 
-### 4. Variáveis de Ambiente
+### 5. Configuração na Vercel
 
-Na Vercel, adicione as seguintes variáveis de ambiente:
+- Framework Preset: **Other**
+- Build Command: `npm run build`
+- Output Directory: `dist/public`
+- Install Command: `npm install`
 
-- `STRIPE_SECRET_KEY`: Sua chave secreta do Stripe
-- `VITE_STRIPE_PUBLIC_KEY`: Sua chave pública do Stripe (para o frontend)
+### 6. Variáveis de Ambiente na Vercel
 
-### 5. Configuração do Projeto na Vercel
+- `STRIPE_SECRET_KEY`: sua chave secreta
+- `VITE_STRIPE_PUBLIC_KEY`: sua chave pública
 
-1. Faça login na sua conta da Vercel
-2. Importe seu repositório com o botão "Import"
-3. Mantenha as configurações padrão, mas certifique-se de:
-   - Definir o Framework Preset como "Vite"
-   - Adicionar as variáveis de ambiente mencionadas acima
-4. Clique em "Deploy"
-
-### 6. Solução Alternativa (Se ainda ver tela branca)
-
-Se após essas mudanças você ainda vê uma tela branca:
-
-1. Na Vercel Dashboard, vá para "Settings" > "Build & Development Settings"
-2. Configure:
-   - Build Command: `npm run build`
-   - Output Directory: `dist/public`
-   - Install Command: `npm install`
-
-3. Na seção "Environment Variables", adicione:
-   - `NODE_ENV`: `production`
-
-4. Vá para "Deployments", selecione os três pontos no deployment mais recente e escolha "Redeploy"
-
-### Verificação
-
-Após reimplantar, verifique:
-- A página inicial carrega corretamente
-- Os botões de pagamento funcionam
-- O checkout do Stripe abre em uma nova aba
-
-### Verificando Problemas
-
-Se ainda tiver problemas:
-1. Verifique os logs de implantação na Vercel para ver erros específicos
-2. Verifique a aba "Functions" para ver se suas funções de API estão sendo registradas
-3. Verifique o código do cliente no navegador para erros de console
+Reimplante e o site deve funcionar.
