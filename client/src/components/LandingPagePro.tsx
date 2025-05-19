@@ -104,7 +104,8 @@ const LandingPagePro = () => {
       
       if (data.url) {
         console.log("Redirecionando para:", data.url);
-        window.location.href = data.url;
+        // Abrir em nova janela em vez de redirecionar
+        window.open(data.url, '_blank');
       } else {
         console.error("Erro: URL de checkout não encontrada na resposta");
         alert("Erro ao gerar pagamento! Detalhes no console.");
