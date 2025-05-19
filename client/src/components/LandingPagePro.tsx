@@ -64,12 +64,18 @@ const LandingPagePro = () => {
       incrementarClique6490();
     }
     
+    // Parâmetros para página de pagamento
+    const valorFormatado = plano === "197" ? "197,00" : "64,90";
+    const tipoPlano = plano === "197" ? "premium" : "basico";
+    
+    // Código PIX para pagamento tradicional
     const pixCode =
       plano === "197"
         ? "00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com5204000053039865404197.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD"
         : "00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com520400005303986540464.905802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD";
     
-    window.location.href = `/pagamento?codigo=${encodeURIComponent(pixCode)}&valor=${plano === "197" ? "197,00" : "64,90"}`;
+    // Redirecionando para a página de pagamento com opções de PIX e cartão
+    window.location.href = `/pagamento?codigo=${encodeURIComponent(pixCode)}&valor=${valorFormatado}&plano=${tipoPlano}`;
   };
   
   const handleEmailSubmit = (e: React.FormEvent) => {
