@@ -42,6 +42,10 @@ const PagamentoPix = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
+        <div className="bg-green-800 text-white px-4 py-2 rounded-lg mb-4 font-bold">
+          Valor a pagar: R${valorExibicao}
+        </div>
+
         <img
           src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCode)}`}
           alt="QR Code Pix"
@@ -66,7 +70,7 @@ const PagamentoPix = () => {
           <li>Abra o aplicativo do seu banco</li>
           <li>Acesse a opção de pagamento via PIX</li>
           <li>Escaneie o QR Code ou copie e cole o código acima</li>
-          <li>Confira o valor de <strong className="text-green-500">R$197,00</strong> e confirme o pagamento</li>
+          <li>Confira o valor de <strong className="text-green-500">R${valorExibicao}</strong> e confirme o pagamento</li>
           <li>Após o pagamento, você receberá o acesso em até 5 minutos</li>
         </ol>
       </div>
