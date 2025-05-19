@@ -1,6 +1,4 @@
-// API serverless para Vercel - Página principal de API
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
+// API serverless para Vercel - Endpoint principal
 module.exports = async (req, res) => {
   // Habilitar CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -13,10 +11,10 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // Resposta básica para verificar se a API está funcionando
-  res.status(200).json({ 
-    message: "API dos Métodos Infalíveis funcionando!", 
+  // Resposta simples para verificar se a API está funcionando
+  res.status(200).json({
     status: "online",
+    message: "API dos Métodos Infalíveis está online!",
     timestamp: new Date().toISOString()
   });
 };
