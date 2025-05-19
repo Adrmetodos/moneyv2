@@ -1,4 +1,4 @@
-# Guia para enviar para o GitHub e implantar na Vercel
+# Guia Otimizado para GitHub e Vercel
 
 ## 1. Criar um repositório no GitHub
 
@@ -10,14 +10,11 @@
 
 ## 2. Preparar o projeto para o GitHub
 
-Certifique-se de que tem o arquivo `.gitignore` com o seguinte conteúdo:
-
-```
-node_modules
-.env
-.env.local
-dist
-```
+O projeto já está preparado com:
+- `.gitignore` configurado
+- `vercel.json` otimizado
+- `vercel-index.html` como página de fallback
+- Funções serverless na pasta `api/`
 
 ## 3. Inicializar o Git e enviar para o GitHub
 
@@ -48,14 +45,14 @@ git push -u origin master
 
 ## 4. Implantar na Vercel
 
+### Método 1: Via GitHub
+
 1. Acesse [Vercel](https://vercel.com/) e faça login
 2. Clique em "Add New..." e selecione "Project"
 3. Importe o repositório que você acabou de criar no GitHub
 4. Na página de configuração:
-   - Framework Preset: Selecione "Other"
-   - Build Command: `npm run build`
-   - Output Directory: `dist/public`
-   - Instale qualquer dependência necessária com `npm install`
+   - **NÃO modifique** nenhuma configuração, pois o arquivo `vercel.json` já tem tudo configurado
+   - Apenas verifique que o diretório de saída está como `dist/public`
 
 5. Adicione as seguintes variáveis de ambiente em "Environment Variables":
    - `STRIPE_SECRET_KEY`: sua chave secreta do Stripe
@@ -63,73 +60,50 @@ git push -u origin master
 
 6. Clique em "Deploy"
 
-## 5. Após a implantação
+### Método 2: Usando Vercel CLI (alternativa)
 
-Se encontrar o problema de tela branca:
-
-1. Vá para as configurações do projeto na Vercel
-2. Em "Build & Development Settings":
-   - Verifique se o Framework Preset está como "Other" (não Vite)
-   - Confirme que Output Directory é `dist/public`
-   - Habilite o "Override" se necessário
-
-3. Em "Git", conecte-se ao branch correto do seu repositório
-
-4. Faça uma nova implantação usando "Redeploy" ou "Redeploy with existing Build Cache"
-
-## 6. Resolver problemas da API do Stripe
-
-Se os pagamentos não funcionarem na Vercel:
-
-1. Na raiz do seu repositório GitHub, crie uma pasta chamada `api`
-2. Dentro dela, crie um arquivo `checkout.js` com o conteúdo abaixo:
-
-```javascript
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
-module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Método não permitido' });
-  }
-
-  try {
-    const { valor } = req.body;
-    const valorInteiro = parseInt(valor);
-    
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'brl',
-            product_data: {
-              name: valorInteiro === 19700 ? 'Métodos Infalíveis - Premium' : 'Métodos Infalíveis - Básico',
-              description: valorInteiro === 19700 ? 'Acesso completo aos 10 métodos' : 'Acesso básico'
-            },
-            unit_amount: valorInteiro,
-          },
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      success_url: `${req.headers.origin}/sucesso`,
-      cancel_url: `${req.headers.origin}/cancelado`,
-    });
-
-    return res.status(200).json({ url: session.url });
-  } catch (error) {
-    console.error('Erro:', error);
-    return res.status(500).json({ error: error.message });
-  }
-};
-```
-
-3. Faça commit destas alterações e envie para o GitHub:
+Se encontrar problemas com o método 1, tente:
 
 ```bash
-git add api/
-git commit -m "Adicionar função de API para Stripe"
-git push origin main
+# Instalar Vercel CLI
+npm install -g vercel
+
+# Login no Vercel
+vercel login
+
+# Implantar (na raiz do projeto)
+vercel --prod
 ```
 
-4. Na Vercel, reimplante o projeto e verifique se a função serverless foi criada corretamente.
+Durante a implantação via CLI, ele perguntará:
+- Settings from vercel.json: Responda "Y"
+- Variáveis de ambiente: Adicione as chaves do Stripe quando solicitado
+
+## 5. Verificar a implantação
+
+Após a implantação, verifique se:
+
+1. A página inicial carrega corretamente
+2. As rotas de navegação funcionam (clique em diferentes opções)
+3. Os formulários e fluxos de pagamento estão funcionando
+
+## 6. Resolver problemas de tela branca
+
+Se encontrar a tela branca na Vercel:
+
+1. Verifique se a URL está correta (deve ter `https://` e não apresentar erros no console)
+2. Na Vercel, vá em "Deployments" e clique nos logs de implantação para verificar erros
+3. Certifique-se de que todas as variáveis de ambiente foram configuradas
+4. Tente acessar diretamente a API: `https://seu-dominio.vercel.app/api`
+
+O projeto já vem com:
+- Página de fallback em `vercel-index.html` que é exibida durante o carregamento
+- Configuração otimizada no `vercel.json` para rotas e redirecionamentos
+- APIs serverless na pasta `api/` que funcionam independentemente do frontend
+
+## 7. Dicas adicionais
+
+- Se precisar atualizar o código, faça as alterações, commit e push para o GitHub. A Vercel reimplantará automaticamente
+- Para testar os pagamentos, use os cartões de teste do Stripe (ex: 4242 4242 4242 4242)
+- Para monitorar erros, use a seção "Monitoring" no painel da Vercel
+- Se continuar enfrentando problemas, tente o Deploy no Netlify seguindo as instruções no arquivo SOLUCAO_IMPLANTACAO.md

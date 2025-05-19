@@ -3,44 +3,142 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="0;url=/index.html">
-  <title>Métodos Infalíveis</title>
+  <title>10 Métodos Infalíveis Para Ganhar Dinheiro Em Casa</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #000, #333);
-      color: white;
-      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #000000, #202020);
+      color: white;
+      min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
     }
-    .loader {
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid #e53e3e;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite;
-      margin-bottom: 20px;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    
     .container {
+      max-width: 800px;
+      padding: 2rem;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, #ff8a00, #e52e71);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+      margin-bottom: 2rem;
+    }
+    
+    .loading:after {
+      content: " ";
+      display: block;
+      width: 64px;
+      height: 64px;
+      margin: 8px;
+      border-radius: 50%;
+      border: 6px solid #fff;
+      border-color: #fff transparent #fff transparent;
+      animation: loading 1.2s linear infinite;
+    }
+    
+    @keyframes loading {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .btn {
+      background: linear-gradient(45deg, #ff8a00, #e52e71);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-top: 2rem;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    
+    p {
       max-width: 600px;
-      padding: 20px;
+      margin: 1rem auto;
+      line-height: 1.6;
+      opacity: 0.8;
+    }
+    
+    .error-details {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+      font-family: monospace;
+      text-align: left;
+      max-width: 600px;
+      overflow-x: auto;
     }
   </style>
+  <script>
+    // Script para verificar se a aplicação principal carrega
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tentativa de redirecionamento após 3 segundos
+      setTimeout(function() {
+        window.location.href = '/';
+      }, 3000);
+    });
+  </script>
 </head>
 <body>
   <div class="container">
-    <div class="loader"></div>
-    <h1>10 MÉTODOS INFALÍVEIS</h1>
-    <p>Redirecionando para a página principal...</p>
+    <h1>10 Métodos Infalíveis</h1>
+    <h2>Carregando sua experiência...</h2>
+    
+    <div class="loading"></div>
+    
+    <p>Estamos preparando conteúdo exclusivo que vai transformar sua vida financeira. Aguarde um momento...</p>
+    
+    <div id="error-container" style="display: none;">
+      <p>Se a página não carregar automaticamente, clique no botão abaixo:</p>
+      <a href="/" class="btn">Ir para o site</a>
+      
+      <div class="error-details" id="error-details">
+        Erro no carregamento da aplicação.
+      </div>
+    </div>
   </div>
+
+  <script>
+    // Se após 5 segundos ainda estivermos nesta página, mostrar opções de fallback
+    setTimeout(function() {
+      document.getElementById('error-container').style.display = 'block';
+    }, 5000);
+  </script>
 </body>
 </html>
