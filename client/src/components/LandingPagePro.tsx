@@ -89,7 +89,7 @@ const LandingPagePro = () => {
         incrementarClique6490();
       }
       
-      const response = await fetch('/api/create-checkout', {
+      const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

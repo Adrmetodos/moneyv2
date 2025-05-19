@@ -1,62 +1,50 @@
 # Guia de Implantação na Vercel
 
-Este guia contém as instruções para implantar este projeto na Vercel.
+Este guia contém instruções para corrigir o problema da tela branca e implantar este projeto na Vercel.
+
+## Solução para Tela Branca
+
+Se você está vendo uma tela branca após a implantação, siga estas instruções:
 
 ## Requisitos
 
 - Uma conta na Vercel
-- Repositório Git (GitHub, GitLab, Bitbucket)
+- Acesso ao repositório do projeto
 
-## Passos para Implantação
+## Passos para Implantação Correta
 
-### 1. Preparação do Projeto
+### 1. Simplificar o arquivo vercel.json
 
-Certifique-se de que o projeto está em um repositório Git. Você pode usar GitHub, GitLab ou Bitbucket.
+Substitua o conteúdo do arquivo `vercel.json` pelo seguinte:
 
-### 2. Arquivos de Configuração
-
-Crie ou modifique os seguintes arquivos:
-
-#### vercel.json
 ```json
 {
-  "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist/client",
-  "framework": "vite",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
-  ]
+  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/public"
 }
 ```
 
-#### api/index.js
-Crie uma pasta `api` na raiz do projeto e dentro dela um arquivo `index.js`:
+### 2. Criar arquivo API para o Stripe
+
+Crie um diretório chamado `api` na raiz do projeto e dentro dele um arquivo `checkout.js`:
 
 ```javascript
-import express from 'express';
-import { createServer } from 'http';
-import path from 'path';
 import Stripe from 'stripe';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const app = express();
-
-// Middleware para processar JSON
-app.use(express.json());
-
-// Configuração do Stripe
+// Inicializa o Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Rota para criar checkout session do Stripe
-app.post('/api/create-checkout', async (req, res) => {
-  const { valor } = req.body;
-  
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Método não permitido' });
+  }
+
   try {
+    const { valor } = req.body;
+    
     // Converter o valor para número inteiro (centavos)
     const valorInteiro = parseInt(valor);
     
@@ -80,54 +68,75 @@ app.post('/api/create-checkout', async (req, res) => {
       cancel_url: `${req.headers.origin}/cancelado`,
     });
 
-    res.status(200).json({ url: session.url });
+    return res.status(200).json({ url: session.url });
   } catch (error) {
     console.error('Erro ao criar sessão de checkout:', error);
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
-});
-
-// Servir arquivos estáticos em produção
-app.use(express.static(path.join(__dirname, '../client')));
-
-// Rota catch-all para Single Page Application
-app.get('*', (req, res) => {
-  // Ignora rotas de API
-  if (req.path.startsWith('/api/')) {
-    return res.status(404).send('API endpoint não encontrado');
-  }
-  
-  res.sendFile(path.join(__dirname, '../client/index.html'));
-});
-
-export default app;
+}
 ```
 
-### 3. Variáveis de Ambiente
+### 3. Modificar a chamada para a API na aplicação
 
-Ao configurar o projeto na Vercel, adicione as seguintes variáveis de ambiente:
+No arquivo `client/src/components/LandingPagePro.tsx`, altere a chamada da API:
+
+```typescript
+// De:
+const response = await fetch('/api/create-checkout', {
+  // ...
+});
+
+// Para:
+const response = await fetch('/api/checkout', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ valor }),
+});
+```
+
+### 4. Variáveis de Ambiente
+
+Na Vercel, adicione as seguintes variáveis de ambiente:
 
 - `STRIPE_SECRET_KEY`: Sua chave secreta do Stripe
-- `VITE_STRIPE_PUBLIC_KEY`: Sua chave pública do Stripe para o cliente
+- `VITE_STRIPE_PUBLIC_KEY`: Sua chave pública do Stripe (para o frontend)
 
-### 4. Implantação na Vercel
+### 5. Configuração do Projeto na Vercel
 
 1. Faça login na sua conta da Vercel
-2. Clique em "New Project" 
-3. Conecte ao repositório Git onde seu projeto está armazenado
-4. Configure as variáveis de ambiente mencionadas acima
-5. Clique em "Deploy"
+2. Importe seu repositório com o botão "Import"
+3. Mantenha as configurações padrão, mas certifique-se de:
+   - Definir o Framework Preset como "Vite"
+   - Adicionar as variáveis de ambiente mencionadas acima
+4. Clique em "Deploy"
 
-### 5. Verifique a Implantação
+### 6. Solução Alternativa (Se ainda ver tela branca)
 
-Após a implantação, verifique se:
+Se após essas mudanças você ainda vê uma tela branca:
+
+1. Na Vercel Dashboard, vá para "Settings" > "Build & Development Settings"
+2. Configure:
+   - Build Command: `npm run build`
+   - Output Directory: `dist/public`
+   - Install Command: `npm install`
+
+3. Na seção "Environment Variables", adicione:
+   - `NODE_ENV`: `production`
+
+4. Vá para "Deployments", selecione os três pontos no deployment mais recente e escolha "Redeploy"
+
+### Verificação
+
+Após reimplantar, verifique:
 - A página inicial carrega corretamente
-- O checkout do Stripe funciona ao clicar nos botões de pagamento
-- As páginas de sucesso e cancelamento estão funcionando
+- Os botões de pagamento funcionam
+- O checkout do Stripe abre em uma nova aba
 
-### Solução de Problemas
+### Verificando Problemas
 
-Se você encontrar problemas:
-1. Verifique os logs de construção na dashboard da Vercel
-2. Confirme se as variáveis de ambiente estão configuradas corretamente
-3. Verifique se o arquivo vercel.json está corretamente formatado
+Se ainda tiver problemas:
+1. Verifique os logs de implantação na Vercel para ver erros específicos
+2. Verifique a aba "Functions" para ver se suas funções de API estão sendo registradas
+3. Verifique o código do cliente no navegador para erros de console
