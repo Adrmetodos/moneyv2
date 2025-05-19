@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 const LandingPagePro = () => {
   const [showMethods, setShowMethods] = useState(false);
   const [plano, setPlano] = useState("197");
+  const [email, setEmail] = useState("");
+  const [emailSuccess, setEmailSuccess] = useState(false);
 
   const handleRevealMethods = () => {
     setShowMethods(true);
@@ -28,6 +30,24 @@ const LandingPagePro = () => {
         : "00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com520400005303986540464.905802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD";
     
     window.location.href = `/pagamento?codigo=${encodeURIComponent(pixCode)}&valor=${plano === "197" ? "197,00" : "64,90"}`;
+  };
+  
+  const handleEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email !== "") {
+      console.log("Email capturado:", email);
+      setEmailSuccess(true);
+      setTimeout(() => {
+        setShowMethods(true);
+        // Scroll to methods after rendering
+        setTimeout(() => {
+          const methodsContainer = document.getElementById("methods-container");
+          if (methodsContainer) {
+            methodsContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 100);
+      }, 1500);
+    }
   };
 
   return (
@@ -70,6 +90,53 @@ const LandingPagePro = () => {
           </motion.p>
         </div>
         
+        {/* Email Capture Form */}
+        {!emailSuccess ? (
+          <motion.div
+            className="w-full max-w-lg mb-10 px-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
+              <h3 className="text-xl font-bold mb-4 text-center">
+                🔥 Coloque seu e-mail abaixo para receber acesso!
+              </h3>
+              <form onSubmit={handleEmailSubmit} className="flex flex-col items-center">
+                <input
+                  type="email"
+                  placeholder="Seu melhor e-mail"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-gray-900 text-white px-6 py-3 rounded-lg outline-none border border-gray-700 mb-4 focus:border-blue-500"
+                  required
+                />
+                <Button
+                  type="submit"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 w-full md:w-auto rounded-full text-lg shadow-lg transform transition-all duration-300 hover:scale-105 animate-pulse"
+                >
+                  RECEBER ACESSO AGORA
+                </Button>
+              </form>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            className="w-full max-w-lg mb-10 px-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="bg-green-700 p-6 rounded-xl border border-green-600 text-center">
+              <svg className="w-12 h-12 mx-auto mb-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <h3 className="text-xl font-bold mb-2">E-mail Cadastrado com Sucesso!</h3>
+              <p className="text-gray-200">Enviamos os métodos para seu email. Confira também sua caixa de spam.</p>
+            </div>
+          </motion.div>
+        )}
+        
         {/* Social Proof */}
         <motion.div 
           className="w-full mb-8 px-4"
@@ -93,28 +160,30 @@ const LandingPagePro = () => {
         </motion.div>
 
         {/* CTA Button Section */}
-        <motion.div 
-          className="mb-10 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-        >
-          <Button 
-            onClick={handleRevealMethods}
-            className={`bg-red-600 hover:bg-red-700 text-white px-8 py-4 mb-2 text-xl rounded-full shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl animate-pulse ${showMethods ? 'bg-green-600 hover:bg-green-700 animate-none' : ''}`}
+        {!showMethods && !emailSuccess && (
+          <motion.div 
+            className="mb-10 text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
           >
-            {showMethods ? 'EXPLORE OS MÉTODOS ABAIXO!' : 'QUERO DESCOBRIR AGORA!'}
-          </Button>
-          
-          <p className="text-gray-400 text-sm mt-3">
-            <span className="inline-flex items-center">
-              <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"></path>
-              </svg>
-              100% seguro e confidencial
-            </span>
-          </p>
-        </motion.div>
+            <Button 
+              onClick={handleRevealMethods}
+              className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 mb-2 text-xl rounded-full shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl animate-pulse"
+            >
+              QUERO VER OS MÉTODOS SEM CADASTRO
+            </Button>
+            
+            <p className="text-gray-400 text-sm mt-3">
+              <span className="inline-flex items-center">
+                <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"></path>
+                </svg>
+                100% seguro e confidencial
+              </span>
+            </p>
+          </motion.div>
+        )}
         
         {/* Methods Section (conditionally rendered) */}
         {showMethods && (
