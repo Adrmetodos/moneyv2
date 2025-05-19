@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import MethodCard from "@/components/MethodCard";
 import { methods, featuredMethod } from "@/data/methods";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import WhatsappCapture from "@/components/WhatsappCapture";
 
 // Funções de monitoramento
 const incrementarVisita = () => {
@@ -21,6 +22,16 @@ const incrementarClique6490 = () => {
 
 const incrementarEmails = () => {
   localStorage.setItem("emails", String(Number(localStorage.getItem("emails") || 0) + 1));
+};
+
+const salvarWhatsapp = (numero: string) => {
+  // Recupera a lista atual
+  const whatsappList = JSON.parse(localStorage.getItem("whatsappList") || "[]");
+  // Adiciona o novo número se ele já não existir
+  if (!whatsappList.includes(numero)) {
+    whatsappList.push(numero);
+    localStorage.setItem("whatsappList", JSON.stringify(whatsappList));
+  }
 };
 
 const LandingPagePro = () => {
