@@ -9,7 +9,10 @@ const CapturaEmail = () => {
     e.preventDefault();
     
     if (email !== "") {
+<<<<<<< HEAD
       // Aqui você pode enviar para um backend ou integração com Mailchimp, GetResponse, etc.
+=======
+>>>>>>> 77e8a522ef328d11a8482dcbf5b44b8164ce88e8
       console.log("Email capturado:", email);
       setSuccess(true);
       setEmail("");
@@ -57,4 +60,8 @@ const CapturaEmail = () => {
   );
 };
 
+<<<<<<< HEAD
 export default CapturaEmail;
+=======
+export default CapturaEmail;
+>>>>>>> 77e8a522ef328d11a8482dcbf5b44b8164ce88e8

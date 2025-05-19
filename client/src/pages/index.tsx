@@ -1,6 +1,12 @@
+// 🔥 LANDING PAGE COMPLETA 🔥
+
 import '../styles/globals.css';
 import { useState } from 'react';
+<<<<<<< HEAD
 import { motion } from 'framer-motion'
+=======
+import { motion } from 'framer-motion';
+>>>>>>> 77e8a522ef328d11a8482dcbf5b44b8164ce88e8
 import Head from 'next/head';
 
 const LandingPagePro = () => {
@@ -58,6 +64,7 @@ const LandingPagePro = () => {
           ))}
 
           <h2 className='text-2xl font-bold mt-10'>Escolha o seu plano:</h2>
+<<<<<<< HEAD
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
             {/* 🔥 PLANO COMPLETO — R$197 */}
             <div className="bg-gray-800 p-6 rounded-xl text-center mb-4 border-2 border-green-500">
@@ -101,6 +108,19 @@ const LandingPagePro = () => {
               </button>
             </div>
           </div>
+=======
+          <select onChange={(e) => setPlano(e.target.value)} className='bg-gray-800 text-white p-4 rounded-lg mb-6 mt-4'>
+            <option value='197'>R$ 197,00 - Todos os métodos</option>
+            <option value='64.90'>R$ 64,90 - Apenas 1 método</option>
+          </select>
+
+          <button
+            onClick={handlePayment}
+            className='bg-green-600 text-white px-8 py-4 hover:bg-green-700 text-xl rounded-full animate-pulse'
+          >
+            PAGAR AGORA
+          </button>
+>>>>>>> 77e8a522ef328d11a8482dcbf5b44b8164ce88e8
 
           <a
             href='https://wa.me/+556293555185?text=Tenho%20dúvidas%20sobre%20o%20pagamento.'
@@ -117,4 +137,8 @@ const LandingPagePro = () => {
 
 export default LandingPagePro;
 
+<<<<<<< HEAD
 
+=======
+// 🔥 FIM DO CÓDIGO COMPLETO
+>>>>>>> 77e8a522ef328d11a8482dcbf5b44b8164ce88e8
