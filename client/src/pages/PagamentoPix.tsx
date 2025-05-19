@@ -3,6 +3,11 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 
+// Função para registrar cópias do código PIX
+const incrementarCopias = () => {
+  localStorage.setItem("copias", String(Number(localStorage.getItem("copias") || 0) + 1));
+};
+
 const PagamentoPix = () => {
   const [location] = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
@@ -17,6 +22,7 @@ const PagamentoPix = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(pixCode);
+    incrementarCopias(); // Incrementa contador de cópias
     setCopied(true);
     setTimeout(() => setCopied(false), 3000);
   };

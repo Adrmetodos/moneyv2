@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,11 +6,33 @@ import MethodCard from "@/components/MethodCard";
 import { methods, featuredMethod } from "@/data/methods";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+// Funções de monitoramento
+const incrementarVisita = () => {
+  localStorage.setItem("visitas", String(Number(localStorage.getItem("visitas") || 0) + 1));
+};
+
+const incrementarClique197 = () => {
+  localStorage.setItem("cliques197", String(Number(localStorage.getItem("cliques197") || 0) + 1));
+};
+
+const incrementarClique6490 = () => {
+  localStorage.setItem("cliques6490", String(Number(localStorage.getItem("cliques6490") || 0) + 1));
+};
+
+const incrementarEmails = () => {
+  localStorage.setItem("emails", String(Number(localStorage.getItem("emails") || 0) + 1));
+};
+
 const LandingPagePro = () => {
   const [showMethods, setShowMethods] = useState(false);
   const [plano, setPlano] = useState("197");
   const [email, setEmail] = useState("");
   const [emailSuccess, setEmailSuccess] = useState(false);
+
+  // Registrar visita ao carregar a página
+  useEffect(() => {
+    incrementarVisita();
+  }, []);
 
   const handleRevealMethods = () => {
     setShowMethods(true);
@@ -24,6 +46,13 @@ const LandingPagePro = () => {
   };
   
   const handlePayment = () => {
+    // Registrar clique no plano
+    if (plano === "197") {
+      incrementarClique197();
+    } else {
+      incrementarClique6490();
+    }
+    
     const pixCode =
       plano === "197"
         ? "00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com5204000053039865404197.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD"
@@ -35,6 +64,9 @@ const LandingPagePro = () => {
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (email !== "") {
+      // Registrar captura de email
+      incrementarEmails();
+      
       console.log("Email capturado:", email);
       setEmailSuccess(true);
       setTimeout(() => {
@@ -86,7 +118,7 @@ const LandingPagePro = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Chega de promessa furada e dica de youtuber que não paga nem o boleto! Aqui estão os métodos que a galera tá usando pra faturar pesado sem sair de casa!
+            Chega de promessa furada e dicas de youtuber que não paga nem o boleto! Aqui estão os métodos que a galera tá usando pra faturar pesado sem sair de casa!
           </motion.p>
         </div>
         
@@ -171,7 +203,7 @@ const LandingPagePro = () => {
               onClick={handleRevealMethods}
               className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 mb-2 text-xl rounded-full shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl animate-pulse"
             >
-              QUERO VER OS MÉTODOS SEM CADASTRO
+              QUERO VER OS MÉTODOS
             </Button>
             
             <p className="text-gray-400 text-sm mt-3">
@@ -312,7 +344,7 @@ const LandingPagePro = () => {
                   <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd"></path>
                   </svg>
-                  Bônus exclusivos
+                  Bônus exclusivos🔥
                 </span>
                 <span className="flex items-center">
                   <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -344,7 +376,7 @@ const LandingPagePro = () => {
                 <div className="text-yellow-400 text-sm">★★★★★</div>
               </div>
             </div>
-            <p className="text-gray-300 text-sm">"Comecei a usar o método Dropshipping Ninja há 3 meses e já estou faturando mais de R$7.000 por mês. Melhor investimento que já fiz!"</p>
+            <p className="text-gray-300 text-sm">"Comecei a usar o método Dropshipping Ninja há 3 meses e já estou faturando mais de R$4.000 por mês. Melhor investimento que já fiz!"</p>
           </Card>
           
           <Card className="bg-gray-800 p-6 rounded-xl">
@@ -359,7 +391,7 @@ const LandingPagePro = () => {
                 <div className="text-yellow-400 text-sm">★★★★★</div>
               </div>
             </div>
-            <p className="text-gray-300 text-sm">"Eu era super cética, mas decidi tentar o método de Afiliado Oculto. Agora estou ganhando R$4.500 sem precisar mostrar meu rosto. Inacreditável!"</p>
+            <p className="text-gray-300 text-sm">"Eu era super cética, mas decidi tentar o método de Afiliado Oculto. Agora estou ganhando R$4.500 sem precisar mostrar meu rosto. Inacreditável! pode comprar e colocar em prática. Os resultados vem muito rápido!🔥"</p>
           </Card>
         </motion.div>
         
