@@ -1,10 +1,18 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
 
 const PagamentoPix = () => {
-  const [pixCode, setPixCode] = useState("00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com52040000530398654041.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD");
+  const [location] = useLocation();
+  const searchParams = new URLSearchParams(window.location.search);
+  const codigoParam = searchParams.get('codigo');
+  const valorParam = searchParams.get('valor');
+  
+  const [pixCode, setPixCode] = useState(
+    codigoParam || "00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com52040000530398654041.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD"
+  );
+  const [valorExibicao, setValorExibicao] = useState(valorParam || "197,00");
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
@@ -67,6 +75,7 @@ const PagamentoPix = () => {
         🔥 <strong>ATENÇÃO!</strong> Oferta válida apenas nas próximas 24 horas!
       </div>
 
+      {/* WhatsApp floating button */}
       <a 
         href="https://wa.me/qr/WXWCW3JQYR4MO1" 
         target="_blank" 

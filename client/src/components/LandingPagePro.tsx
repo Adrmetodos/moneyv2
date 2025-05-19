@@ -4,16 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import MethodCard from "@/components/MethodCard";
 import { methods, featuredMethod } from "@/data/methods";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const LandingPagePro = () => {
   const [showMethods, setShowMethods] = useState(false);
-  const [plano, setPlano] = useState('197');
-  const [pixCode, setPixCode] = useState('');
-  const [showPayment, setShowPayment] = useState(false);
-
+  const [plano, setPlano] = useState("197");
 
   const handleRevealMethods = () => {
     setShowMethods(true);
+    // Scroll to methods after rendering
     setTimeout(() => {
       const methodsContainer = document.getElementById("methods-container");
       if (methodsContainer) {
@@ -21,22 +20,21 @@ const LandingPagePro = () => {
       }
     }, 100);
   };
-
-  const handlePayment = (price: string) => {
-    const code =
-      price === '197'
-        ? '00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com5204000053039865404197.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD'
-        : '00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com520400005303986540464.905802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD';
-
-    setPixCode(code);       // Define o código PIX no state
-    setShowPayment(true);   // Ativa a visualização
+  
+  const handlePayment = () => {
+    const pixCode =
+      plano === "197"
+        ? "00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com5204000053039865404197.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD"
+        : "00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com520400005303986540464.905802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD";
+    
+    window.location.href = `/pagamento?codigo=${encodeURIComponent(pixCode)}&valor=${plano === "197" ? "197,00" : "64,90"}`;
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white relative overflow-hidden">
       {/* Background pattern with overlay */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1579621970795-87facc2f976d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-10"></div>
-
+      
       {/* WhatsApp floating button */}
       <a 
         href="https://wa.me/qr/WXWCW3JQYR4MO1" 
@@ -48,7 +46,7 @@ const LandingPagePro = () => {
           <path d="M17.4725 14.715C17.1875 14.5725 15.72 13.8525 15.4575 13.7625C15.195 13.6725 14.9999 13.6275 14.8049 13.9125C14.6099 14.1975 14.04 14.87 13.8675 15.065C13.695 15.26 13.5225 15.2825 13.2375 15.14C12.9525 14.9975 11.9925 14.6725 10.8599 13.6725C9.9749 12.8975 9.3899 11.9425 9.2174 11.6575C9.0449 11.3725 9.1999 11.215 9.3449 11.0675C9.4749 10.935 9.6324 10.7175 9.7799 10.545C9.9274 10.3725 9.9724 10.2525 10.0624 10.0575C10.1524 9.8625 10.1074 9.69 10.0399 9.5475C9.9724 9.405 9.3899 7.9375 9.1499 7.3675C8.9099 6.7975 8.6699 6.89 8.4899 6.89C8.3174 6.875 8.1224 6.875 7.9274 6.875C7.7324 6.875 7.4249 6.9425 7.1624 7.2275C6.8999 7.5125 6.1349 8.2325 6.1349 9.7C6.1349 11.1675 7.1849 12.59 7.3324 12.785C7.4799 12.98 9.3749 15.92 12.2924 17.185C13.0349 17.5 13.6174 17.6925 14.0699 17.83C14.8049 18.0625 15.4724 18.0325 16.0024 17.965C16.5924 17.8825 17.8024 17.245 18.0424 16.5775C18.2824 15.91 18.2824 15.34 18.215 15.2175C18.1475 15.095 17.9525 15.0275 17.6675 14.885L17.4725 14.715ZM12.0524 21.8125H12.0374C10.2803 21.8127 8.55595 21.3775 7.0124 20.5525L6.6724 20.3575L2.9624 21.3175L3.9374 17.71L3.7199 17.3575C2.81794 15.7605 2.34665 13.9368 2.3499 12.08C2.3499 6.83 6.6199 2.5625 12.0674 2.5625C14.6774 2.5625 17.1224 3.575 18.9974 5.45C19.9222 6.36818 20.6535 7.46692 21.1492 8.68504C21.6448 9.90316 21.8952 11.215 21.8874 12.5375C21.8724 17.7875 17.6049 21.8125 12.0524 21.8125ZM20.5574 3.89C19.4323 2.75681 18.0911 1.85919 16.612 1.25152C15.1328 0.643846 13.5435 0.335755 11.9374 0.3475C5.5124 0.3475 0.2924 5.5675 0.2774 12.0775C0.2774 14.2025 0.8474 16.2575 1.9124 18.0675L0.2774 24L6.3374 22.4C8.0774 23.365 10.0324 23.875 12.0224 23.875H12.0374C18.4624 23.875 23.6824 18.655 23.6974 12.145C23.7094 10.5315 23.4007 8.93458 22.7837 7.44864C22.1667 5.9627 21.2599 4.61614 20.1174 3.485L20.5574 3.89Z" />
         </svg>
       </a>
-
+      
       {/* Main content container */}
       <div className="relative z-10 min-h-screen w-full max-w-4xl mx-auto flex flex-col items-center p-4 md:p-10">
         {/* Header Section */}
@@ -61,7 +59,7 @@ const LandingPagePro = () => {
           >
             10 MÉTODOS INFALÍVEIS PRA GANHAR DINHEIRO EM CASA! 💣🔥
           </motion.h1>
-
+          
           <motion.p 
             className="text-base md:text-lg mb-6 max-w-2xl mx-auto text-gray-200 leading-relaxed"
             initial={{ opacity: 0 }}
@@ -71,7 +69,7 @@ const LandingPagePro = () => {
             Chega de promessa furada e dica de youtuber que não paga nem o boleto! Aqui estão os métodos que a galera tá usando pra faturar pesado sem sair de casa!
           </motion.p>
         </div>
-
+        
         {/* Social Proof */}
         <motion.div 
           className="w-full mb-8 px-4"
@@ -107,7 +105,7 @@ const LandingPagePro = () => {
           >
             {showMethods ? 'EXPLORE OS MÉTODOS ABAIXO!' : 'QUERO DESCOBRIR AGORA!'}
           </Button>
-
+          
           <p className="text-gray-400 text-sm mt-3">
             <span className="inline-flex items-center">
               <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -117,52 +115,7 @@ const LandingPagePro = () => {
             </span>
           </p>
         </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-
-          {/* 🔥 PLANO COMPLETO — R$197 */}
-          <div className="bg-gray-800 p-6 rounded-xl text-center mb-4 border-2 border-green-500">
-            <div className="text-5xl font-extrabold text-green-400 mb-2 animate-pulse">
-              Por apenas R$197
-            </div>
-            <div className="text-xl text-gray-400">
-              Ou <span className="text-green-300 font-bold">12x de R$19,70</span> sem juros
-            </div>
-            <div className="mt-4">
-              <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm">
-                🔥 Oferta Limitada!
-              </span>
-            </div>
-            <button
-              onClick={() => handlePayment('197')}
-              className="bg-green-600 text-white px-8 py-4 mt-4 hover:bg-green-700 text-xl rounded-full animate-pulse"
-            >
-              COMPRAR AGORA
-            </button>
-          </div>
-
-          {/* 🔥 PLANO SIMPLES — R$64,90 */}
-          <div className="bg-gray-800 p-6 rounded-xl text-center mb-4 border-2 border-blue-500">
-            <div className="text-5xl font-extrabold text-blue-400 mb-2 animate-pulse">
-              Por apenas R$64,90
-            </div>
-            <div className="text-xl text-gray-400">
-              Ou <span className="text-blue-300 font-bold">3x de R$21,63</span> sem juros
-            </div>
-            <div className="mt-4">
-              <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm">
-                🔥 Acesso Imediato!
-              </span>
-            </div>
-            <button
-              onClick={() => handlePayment('64.90')}
-              className="bg-blue-600 text-white px-8 py-4 mt-4 hover:bg-blue-700 text-xl rounded-full animate-pulse"
-            >
-              COMPRAR AGORA
-            </button>
-          </div>
-        </div>
-
+        
         {/* Methods Section (conditionally rendered) */}
         {showMethods && (
           <motion.div 
@@ -191,7 +144,7 @@ const LandingPagePro = () => {
                 <span>348 pessoas usando agora</span>
               </div>
             </motion.div>
-
+            
             {/* Methods Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
               {methods.map((method, index) => (
@@ -202,12 +155,12 @@ const LandingPagePro = () => {
                 />
               ))}
             </div>
-
+            
             {/* Vagas limitadas alert */}
             <div className="bg-red-700 text-white p-4 rounded-xl text-center mt-4 mb-8 animate-pulse">
               🔥 <strong>VAGAS LIMITADAS!</strong> Apenas 5 acessos disponíveis para hoje! Não perca!
             </div>
-
+            
             {/* Final CTA */}
             <motion.div 
               className="bg-gray-900 rounded-xl p-8 border border-gray-700 text-center mb-16"
@@ -217,61 +170,53 @@ const LandingPagePro = () => {
             >
               <h2 className="text-2xl md:text-3xl font-bold mb-4">Pronto para começar a faturar agora?</h2>
               <p className="text-gray-300 mb-6 max-w-lg mx-auto">Tenha acesso completo aos 10 métodos com tutoriais passo a passo, comunidade exclusiva e suporte 24/7.</p>
-
+              
               <img 
                 src="https://images.unsplash.com/photo-1534951009808-766178b47a4f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=400" 
                 alt="Pessoa celebrando sucesso financeiro com laptop" 
                 className="w-full h-48 object-cover rounded-lg mb-6"
               />
-
+              
               <div className="mb-6">
-                <div className="flex justify-center items-center mb-2">
-                  <span className="text-gray-400 line-through text-lg">De R$997</span>
-                  <span className="ml-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full">80% OFF</span>
+                <h3 className="text-xl font-bold mt-4 mb-3">Escolha o seu plano:</h3>
+                <div className="flex flex-col md:flex-row justify-center gap-4 mb-6">
+                  <div 
+                    className={`bg-gray-800 p-4 rounded-xl border-2 transition-all cursor-pointer ${plano === "197" ? "border-green-500" : "border-gray-700"}`}
+                    onClick={() => setPlano("197")}
+                  >
+                    <div className="text-xl font-bold mb-1">Plano Completo</div>
+                    <div className="flex justify-center items-center mb-2">
+                      <span className="text-gray-400 line-through text-sm">De R$997</span>
+                      <span className="ml-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full">80% OFF</span>
+                    </div>
+                    <div className="text-3xl font-bold text-white mb-1">R$197</div>
+                    <div className="text-gray-400 text-sm">Ou 12x de R$19,70</div>
+                    <div className="mt-2 text-sm text-green-400">✓ Acesso a todos os 10 métodos</div>
+                  </div>
+                  
+                  <div 
+                    className={`bg-gray-800 p-4 rounded-xl border-2 transition-all cursor-pointer ${plano === "64.90" ? "border-green-500" : "border-gray-700"}`}
+                    onClick={() => setPlano("64.90")}
+                  >
+                    <div className="text-xl font-bold mb-1">Plano Básico</div>
+                    <div className="flex justify-center items-center mb-2">
+                      <span className="text-gray-400 line-through text-sm">De R$197</span>
+                      <span className="ml-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full">67% OFF</span>
+                    </div>
+                    <div className="text-3xl font-bold text-white mb-1">R$64,90</div>
+                    <div className="text-gray-400 text-sm">Pagamento único</div>
+                    <div className="mt-2 text-sm text-yellow-400">✓ Acesso a 1 método à sua escolha</div>
+                  </div>
                 </div>
-                <div className="text-4xl font-bold text-white mb-2">Por apenas R$197</div>
-                <div className="text-gray-400">Ou 12x de R$19,70</div>
               </div>
-
+              
               <Button 
-                className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 w-full md:w-auto rounded-full text-lg shadow-lg transform transition-all duration-300 hover:scale-105 animate-pulse mb-6"
-                onClick={() => handlePayment(plano)}
+                className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 w-full md:w-auto rounded-full text-lg shadow-lg transform transition-all duration-300 hover:scale-105 animate-pulse"
+                onClick={handlePayment}
               >
                 QUERO TER ACESSO AGORA
               </Button>
-
-              {showPayment && (
-                <div className="bg-gray-800 p-6 rounded-xl text-center mt-6">
-                  <h2 className="text-2xl font-bold text-white mb-4">Pagamento PIX</h2>
-
-                  <img
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCode)}`}
-                    alt="QR Code de Pagamento"
-                    className="mx-auto mb-4"
-                  />
-
-                  <div className="bg-gray-700 text-white p-4 rounded-lg mb-4">
-                    <p className="mb-2">Copia e Cola:</p>
-                    <textarea
-                      value={pixCode}
-                      readOnly
-                      className="bg-gray-600 text-white w-full p-2 rounded-lg outline-none"
-                      onClick={(e) => e.target.select()}
-                    />
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(pixCode);
-                      alert("Código copiado para a área de transferência!");
-                    }}
-                    className="bg-green-600 text-white px-8 py-4 hover:bg-green-700 text-xl rounded-full animate-pulse"
-                  >
-                    COPIAR CÓDIGO
-                  </button>
-                </div>
-              )}
-
+              
               <div className="mt-4 flex justify-center space-x-4 text-sm text-gray-400">
                 <span className="flex items-center">
                   <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -289,7 +234,7 @@ const LandingPagePro = () => {
             </motion.div>
           </motion.div>
         )}
-
+        
         {/* Testimonials */}
         <motion.div 
           className="w-full mb-10 grid grid-cols-1 md:grid-cols-2 gap-6"
@@ -311,7 +256,7 @@ const LandingPagePro = () => {
             </div>
             <p className="text-gray-300 text-sm">"Comecei a usar o método Dropshipping Ninja há 3 meses e já estou faturando mais de R$7.000 por mês. Melhor investimento que já fiz!"</p>
           </Card>
-
+          
           <Card className="bg-gray-800 p-6 rounded-xl">
             <div className="flex items-center mb-4">
               <img 
@@ -327,7 +272,7 @@ const LandingPagePro = () => {
             <p className="text-gray-300 text-sm">"Eu era super cética, mas decidi tentar o método de Afiliado Oculto. Agora estou ganhando R$4.500 sem precisar mostrar meu rosto. Inacreditável!"</p>
           </Card>
         </motion.div>
-
+        
         {/* Footer */}
         <div className="w-full text-center text-gray-500 text-xs mt-auto pt-6 border-t border-gray-800">
           <p className="mb-2">© 2023 Métodos Infalíveis. Todos os direitos reservados.</p>
