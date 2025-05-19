@@ -179,33 +179,54 @@ const LandingPagePro = () => {
               
               <div className="mb-6">
                 <h3 className="text-xl font-bold mt-4 mb-3">Escolha o seu plano:</h3>
-                <div className="flex flex-col md:flex-row justify-center gap-4 mb-6">
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                  {/* 🔥 PLANO COMPLETO — R$197 */}
                   <div 
-                    className={`bg-gray-800 p-4 rounded-xl border-2 transition-all cursor-pointer ${plano === "197" ? "border-green-500" : "border-gray-700"}`}
+                    className={`bg-gray-800 p-6 rounded-xl text-center mb-4 border-2 cursor-pointer transition-all ${plano === "197" ? "border-green-500" : "border-gray-700 hover:border-green-500"}`}
                     onClick={() => setPlano("197")}
                   >
-                    <div className="text-xl font-bold mb-1">Plano Completo</div>
-                    <div className="flex justify-center items-center mb-2">
-                      <span className="text-gray-400 line-through text-sm">De R$997</span>
-                      <span className="ml-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full">80% OFF</span>
+                    <div className="text-5xl font-extrabold text-green-400 mb-2 animate-pulse">
+                      Por apenas R$197
                     </div>
-                    <div className="text-3xl font-bold text-white mb-1">R$197</div>
-                    <div className="text-gray-400 text-sm">Ou 12x de R$19,70</div>
-                    <div className="mt-2 text-sm text-green-400">✓ Acesso a todos os 10 métodos</div>
+                    <div className="text-xl text-gray-400">
+                      Ou <span className="text-green-300 font-bold">12x de R$19,70</span> sem juros
+                    </div>
+                    <div className="mt-4">
+                      <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm">
+                        🔥 Oferta Limitada!
+                      </span>
+                    </div>
+                    <div className="mt-4 text-left">
+                      <div className="text-sm text-green-400 mb-2">✓ Acesso a todos os 10 métodos</div>
+                      <div className="text-sm text-green-400 mb-2">✓ Suporte exclusivo 24/7</div>
+                      <div className="text-sm text-green-400 mb-2">✓ Comunidade VIP de alunos</div>
+                      <div className="text-sm text-green-400 mb-2">✓ Atualizações gratuitas</div>
+                    </div>
                   </div>
-                  
+
+                  {/* 🔥 PLANO SIMPLES — R$64,90 */}
                   <div 
-                    className={`bg-gray-800 p-4 rounded-xl border-2 transition-all cursor-pointer ${plano === "64.90" ? "border-green-500" : "border-gray-700"}`}
+                    className={`bg-gray-800 p-6 rounded-xl text-center mb-4 border-2 cursor-pointer transition-all ${plano === "64.90" ? "border-blue-500" : "border-gray-700 hover:border-blue-500"}`}
                     onClick={() => setPlano("64.90")}
                   >
-                    <div className="text-xl font-bold mb-1">Plano Básico</div>
-                    <div className="flex justify-center items-center mb-2">
-                      <span className="text-gray-400 line-through text-sm">De R$197</span>
-                      <span className="ml-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full">67% OFF</span>
+                    <div className="text-5xl font-extrabold text-blue-400 mb-2 animate-pulse">
+                      Por apenas R$64,90
                     </div>
-                    <div className="text-3xl font-bold text-white mb-1">R$64,90</div>
-                    <div className="text-gray-400 text-sm">Pagamento único</div>
-                    <div className="mt-2 text-sm text-yellow-400">✓ Acesso a 1 método à sua escolha</div>
+                    <div className="text-xl text-gray-400">
+                      Ou <span className="text-blue-300 font-bold">3x de R$21,63</span> sem juros
+                    </div>
+                    <div className="mt-4">
+                      <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm">
+                        🔥 Acesso Imediato!
+                      </span>
+                    </div>
+                    <div className="mt-4 text-left">
+                      <div className="text-sm text-blue-400 mb-2">✓ Escolha 1 método para acessar</div>
+                      <div className="text-sm text-blue-400 mb-2">✓ Suporte por 30 dias</div>
+                      <div className="text-sm text-blue-400 mb-2">✓ Satisfação garantida</div>
+                      <div className="text-sm text-gray-500 mb-2">✗ Sem acesso à comunidade VIP</div>
+                    </div>
                   </div>
                 </div>
               </div>
