@@ -7,6 +7,9 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import PagamentoPix from "@/pages/PagamentoPix";
 import Dashboard from "@/pages/Dashboard";
+import Checkout from "@/pages/Checkout";
+import Sucesso from "@/pages/Sucesso";
+import Cancelado from "@/pages/Cancelado";
 
 function Router() {
   return (
@@ -14,6 +17,9 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/pagamento" component={PagamentoPix} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/checkout" component={Checkout} />
+      <Route path="/sucesso" component={Sucesso} />
+      <Route path="/cancelado" component={Cancelado} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>

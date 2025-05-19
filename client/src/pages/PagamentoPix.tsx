@@ -9,15 +9,22 @@ const incrementarCopias = () => {
 };
 
 const PagamentoPix = () => {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
   const codigoParam = searchParams.get('codigo');
   const valorParam = searchParams.get('valor');
+  const planoParam = searchParams.get('plano') || 'premium';
   
   const [pixCode, setPixCode] = useState(
     codigoParam || "00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com52040000530398654041.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD"
   );
   const [valorExibicao, setValorExibicao] = useState(valorParam || "197,00");
+  const [valorNumerico, setValorNumerico] = useState(() => {
+    if (valorParam) {
+      return parseFloat(valorParam.replace(',', '.'));
+    }
+    return planoParam === 'premium' ? 197 : 64.90;
+  });
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
@@ -25,6 +32,10 @@ const PagamentoPix = () => {
     incrementarCopias(); // Incrementa contador de cópias
     setCopied(true);
     setTimeout(() => setCopied(false), 3000);
+  };
+  
+  const navigateToStripeCheckout = () => {
+    navigate(`/checkout?plano=${planoParam}&valor=${valorNumerico}`);
   };
 
   return (
@@ -79,6 +90,24 @@ const PagamentoPix = () => {
           <li>Confira o valor de <strong className="text-green-500">R${valorExibicao}</strong> e confirme o pagamento</li>
           <li>Após o pagamento, você receberá o acesso em até 5 minutos</li>
         </ol>
+      </div>
+
+      <div className="bg-gray-800 p-6 rounded-xl mb-8 max-w-xl w-full">
+        <h2 className="text-xl font-bold mb-4 text-center">Outras formas de pagamento</h2>
+        
+        <Button 
+          onClick={navigateToStripeCheckout}
+          className="bg-purple-600 hover:bg-purple-700 text-white w-full py-3 mb-4 flex items-center justify-center"
+        >
+          <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 2H6C4.89 2 4 2.9 4 4V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V8L14 2ZM18 20H6V4H13V9H18V20ZM9 13.25H15V14.75H9V13.25ZM9 16.25H15V17.75H9V16.25ZM9 10.25H15V11.75H9V10.25Z" />
+          </svg>
+          Pagar com Cartão de Crédito
+        </Button>
+        
+        <p className="text-center text-gray-400 text-sm">
+          Processamos pagamentos com segurança via Stripe
+        </p>
       </div>
 
       <div className="bg-red-700 text-white p-4 rounded-xl text-center mt-4 mb-8 max-w-xl w-full animate-pulse">
