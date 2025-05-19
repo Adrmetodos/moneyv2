@@ -19,7 +19,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const valorInteiro = parseInt(valor);
       
       const session = await stripe.checkout.sessions.create({
-        payment_method_types: ["card", "boleto", "pix"],
+        payment_method_types: ["card"],
         line_items: [
           {
             price_data: {
