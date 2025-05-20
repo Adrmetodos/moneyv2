@@ -17,10 +17,10 @@ export const sendSlackNotification = async (
     return false;
   }
   
-  const slackApiKey = process.env.SLACK_LIVE_API_KEY;
+  const slackApiKey = process.env.SECRET_LIVE_API_KEY;
   
   if (!slackApiKey) {
-    console.error('Erro: SLACK_LIVE_API_KEY não configurada');
+    console.error('Erro: Chave de API do Slack não configurada');
     return false;
   }
   

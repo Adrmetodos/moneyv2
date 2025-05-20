@@ -1,41 +1,31 @@
-// API serverless para Vercel
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+import Stripe from 'stripe';
 
-module.exports = async (req, res) => {
-  // Habilitar CORS
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2022-11-15',
+});
 
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
-
+export default async function handler(req, res) {
   if (req.method === 'POST') {
+    const { valor } = req.body;
+
     try {
-      const { valor } = req.body;
-      
-      // Criar sessão de checkout do Stripe
       const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
+        payment_method_types: ['card', 'pix'],
         line_items: [
           {
             price_data: {
               currency: 'brl',
               product_data: {
                 name: 'Métodos Infalíveis',
-                description: 'Pacote de métodos para ganhar dinheiro em casa'
               },
-              unit_amount: parseInt(valor),
+              unit_amount: parseInt(valor), // valor em centavos
             },
             quantity: 1,
           },
         ],
         mode: 'payment',
-        success_url: `${req.headers.origin || process.env.VERCEL_URL}/sucesso`,
-        cancel_url: `${req.headers.origin || process.env.VERCEL_URL}/cancelado`,
+        success_url: 'https://teusite.vercel.app/sucesso',
+        cancel_url: 'https://teusite.vercel.app/cancelado',
       });
 
       res.status(200).json({ url: session.url });
@@ -46,4 +36,4 @@ module.exports = async (req, res) => {
     res.setHeader('Allow', 'POST');
     res.status(405).end('Método não permitido');
   }
-};
+}

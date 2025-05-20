@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
         return res.status(400).json({ error: 'Mensagem é obrigatória' });
       }
       
-      const slackApiKey = process.env.SLACK_LIVE_API_KEY;
+      const slackApiKey = process.env.SECRET_LIVE_API_KEY;
       
       if (!slackApiKey) {
         return res.status(500).json({ error: 'Chave da API do Slack não configurada' });
