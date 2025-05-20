@@ -6,10 +6,5 @@
     { "handle": "filesystem" },
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/(.*)", "dest": "/index.html" }
-  ],
-  "env": {
-    "STRIPE_SECRET_KEY": "${STRIPE_SECRET_KEY}",
-    "VITE_STRIPE_PUBLIC_KEY": "${VITE_STRIPE_PUBLIC_KEY}",
-    "SECRET_LIVE_API_KEY": "${SECRET_LIVE_API_KEY}"
-  }
+  ]
 }
