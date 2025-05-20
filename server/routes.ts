@@ -4,16 +4,30 @@ import { storage } from "./storage";
 import Stripe from "stripe";
 import { sendSlackNotification } from "./slackNotification";
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
-}
+// Verifica se a chave do Stripe está disponível
+const hasStripeKey = !!process.env.STRIPE_SECRET_KEY;
+console.log("Stripe está configurado:", hasStripeKey ? "Sim" : "Não");
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+// Inicializa o Stripe apenas se a chave estiver disponível
+const stripe = hasStripeKey ? new Stripe(process.env.STRIPE_SECRET_KEY as string) : null;
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Rota para criar sessão de checkout do Stripe
   app.post("/api/create-checkout", async (req: Request, res: Response) => {
     const { valor } = req.body;
+    
+    // Verificar se o Stripe está configurado
+    if (!hasStripeKey || !stripe) {
+      console.log("Tentativa de checkout sem Stripe configurado");
+      await sendSlackNotification({
+        message: `Tentativa de checkout sem Stripe configurado: R$ ${parseInt(valor) / 100}`,
+        type: 'error'
+      });
+      return res.status(503).json({ 
+        error: "Pagamento temporariamente indisponível", 
+        message: "O serviço de pagamento não está configurado. Por favor, tente novamente mais tarde."
+      });
+    }
     
     try {
       // Converter o valor para número inteiro (centavos)
@@ -22,7 +36,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const planoNome = valorInteiro === 19700 ? "Métodos Infalíveis - Plano Premium" : "Métodos Infalíveis - Plano Básico";
       const planoDescricao = valorInteiro === 19700 ? "Acesso a todos os 10 métodos infalíveis para ganhar dinheiro" : "Acesso aos métodos básicos para ganhar dinheiro";
       
-      const session = await stripe.checkout.sessions.create({
+      const session = await stripe!.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [
           {
@@ -64,11 +78,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Rota para criar um PaymentIntent para pagamentos de uma vez só
   app.post("/api/create-payment-intent", async (req: Request, res: Response) => {
+    // Verificar se o Stripe está configurado
+    if (!hasStripeKey || !stripe) {
+      console.log("Tentativa de payment intent sem Stripe configurado");
+      await sendSlackNotification({
+        message: `Tentativa de criar payment intent sem Stripe configurado`,
+        type: 'error'
+      });
+      return res.status(503).json({ 
+        error: "Pagamento temporariamente indisponível", 
+        message: "O serviço de pagamento não está configurado. Por favor, tente novamente mais tarde."
+      });
+    }
+    
     try {
       const { amount, plano } = req.body;
       const amountInCents = Math.round(amount * 100); // Converter para centavos
       
-      const paymentIntent = await stripe.paymentIntents.create({
+      const paymentIntent = await stripe!.paymentIntents.create({
         amount: amountInCents,
         currency: "brl",
         payment_method_types: ["card", "pix"],
