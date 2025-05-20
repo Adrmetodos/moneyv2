@@ -1,4 +1,5 @@
 // 🔥 LANDING PAGE COMPLETA 🔥
+const [erro, setErro] = useState("");
 
 import '../styles/globals.css';
 import { useState } from 'react';
