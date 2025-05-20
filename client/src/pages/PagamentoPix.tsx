@@ -34,9 +34,7 @@ const PagamentoPix = () => {
     setTimeout(() => setCopied(false), 3000);
   };
   
-  const navigateToStripeCheckout = () => {
-    navigate(`/checkout?plano=${planoParam}&valor=${valorNumerico}`);
-  };
+  // Função de navegação removida - não usamos mais pagamento com cartão
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white flex flex-col items-center p-4 md:p-10">
@@ -92,23 +90,7 @@ const PagamentoPix = () => {
         </ol>
       </div>
 
-      <div className="bg-gray-800 p-6 rounded-xl mb-8 max-w-xl w-full">
-        <h2 className="text-xl font-bold mb-4 text-center">Outras formas de pagamento</h2>
-        
-        <Button 
-          onClick={navigateToStripeCheckout}
-          className="bg-purple-600 hover:bg-purple-700 text-white w-full py-3 mb-4 flex items-center justify-center"
-        >
-          <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M14 2H6C4.89 2 4 2.9 4 4V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V8L14 2ZM18 20H6V4H13V9H18V20ZM9 13.25H15V14.75H9V13.25ZM9 16.25H15V17.75H9V16.25ZM9 10.25H15V11.75H9V10.25Z" />
-          </svg>
-          Pagar com Cartão de Crédito
-        </Button>
-        
-        <p className="text-center text-gray-400 text-sm">
-          Processamos pagamentos com segurança via Stripe
-        </p>
-      </div>
+      {/* Seção de pagamento alternativo removida */}
 
       <div className="bg-red-700 text-white p-4 rounded-xl text-center mt-4 mb-8 max-w-xl w-full animate-pulse">
         🔥 <strong>ATENÇÃO!</strong> Oferta válida apenas nas próximas 24 horas!
