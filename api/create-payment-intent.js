@@ -1,5 +1,8 @@
 // API serverless para Vercel - Stripe Payment Intent
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+// Verifica se a chave do Stripe está disponível
+const hasStripeKey = !!process.env.STRIPE_SECRET_KEY;
+// Inicializa o Stripe apenas se a chave estiver disponível
+const stripe = hasStripeKey ? require('stripe')(process.env.STRIPE_SECRET_KEY) : null;
 
 module.exports = async (req, res) => {
   // Habilitar CORS
@@ -14,6 +17,15 @@ module.exports = async (req, res) => {
   }
 
   if (req.method === 'POST') {
+    // Verificar se o Stripe está configurado
+    if (!hasStripeKey || !stripe) {
+      console.log("Tentativa de payment intent sem Stripe configurado");
+      return res.status(503).json({ 
+        error: "Pagamento temporariamente indisponível", 
+        message: "O serviço de pagamento não está configurado. Por favor, tente novamente mais tarde."
+      });
+    }
+    
     try {
       const { amount } = req.body;
       
