@@ -7,6 +7,11 @@ import { sendSlackNotification } from "./slackNotification";
 // Verifica se a chave do Stripe está disponível
 const hasStripeKey = !!process.env.STRIPE_SECRET_KEY;
 console.log("Stripe está configurado:", hasStripeKey ? "Sim" : "Não");
+// Mostrar apenas os primeiros caracteres da chave para segurança
+if (process.env.STRIPE_SECRET_KEY) {
+  const maskedKey = process.env.STRIPE_SECRET_KEY.substring(0, 7) + '...' + process.env.STRIPE_SECRET_KEY.slice(-4);
+  console.log('Stripe Secret Key (parcial):', maskedKey);
+}
 
 // Inicializa o Stripe apenas se a chave estiver disponível
 const stripe = hasStripeKey ? new Stripe(process.env.STRIPE_SECRET_KEY as string) : null;
