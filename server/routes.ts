@@ -3,6 +3,8 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { sendSlackNotification } from "./slackNotification";
 
+// Removemos a importação do Stripe
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Rota para simular checkout (apenas para PIX, sem cartão de crédito)
   app.post("/api/create-checkout", async (req: Request, res: Response) => {
