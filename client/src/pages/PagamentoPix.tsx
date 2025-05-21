@@ -27,11 +27,10 @@ const PagamentoPix = () => {
   // Valor para exibição
   const [valorExibicao, setValorExibicao] = useState(valorParam || (planoParam === 'premium' ? "197,00" : "64,90"));
   
-  // Código PIX com o valor correto para o plano premium (R$197,00)
-  const premiumPixCode = "00020126580014BR.GOV.BCB.PIX0136706b3ecb-d405-4b4a-883f-f35a167b06b35204000053039865406197.005802BR5913Adriano Silva6009SAO PAULO62140510wkD2OabgKx63048F31";
+  // Códigos PIX fornecidos com valores corretos
+  const premiumPixCode = "00020126580014BR.GOV.BCB.PIX0136706b3ecb-d405-4b4a-883f-f35a167b06b35204000053039865406197.005802BR5913Adriano Silva6009SAO PAULO62140510iVBd9a1E3O6304EFF8";
   
-  // Código PIX com o valor correto para o plano básico (R$64,90)
-  const basicPixCode = "00020126580014BR.GOV.BCB.PIX0136706b3ecb-d405-4b4a-883f-f35a167b06b35204000053039865406064.905802BR5913Adriano Silva6009SAO PAULO62140510wkD2OabgKx63048F31";
+  const basicPixCode = "00020126580014BR.GOV.BCB.PIX0136706b3ecb-d405-4b4a-883f-f35a167b06b3520400005303986540564.905802BR5913Adriano Silva6009SAO PAULO62140510IT96G2GNOb6304AF9B";
   
   // Seleciona o código PIX com base no plano
   const [pixCode, setPixCode] = useState(planoParam === 'premium' ? premiumPixCode : basicPixCode);
