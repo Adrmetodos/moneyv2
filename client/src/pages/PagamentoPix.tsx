@@ -16,11 +16,11 @@ const PagamentoPix = () => {
   const valorParam = searchParams.get('valor');
   const planoParam = searchParams.get('plano') || 'premium';
   
-  // Código PIX completo para cópia
+  // Código PIX completo para cópia - usando a chave aleatória fornecida
   const [pixCode, setPixCode] = useState(
     planoParam === 'premium' 
-      ? "00020126580014BR.GOV.BCB.PIX01116599241957152040000530398654019700.005802BR5913Adriano Silva6009SAO PAULO62070503***63041DBC"
-      : "00020126580014BR.GOV.BCB.PIX01116599241957152040000530398654006490.005802BR5913Adriano Silva6009SAO PAULO62070503***63041DBC"
+      ? "00020126580014BR.GOV.BCB.PIX0136706b3ecb-d405-4b4a-883f-f35a167b06b35204000053039865802BR5913Adriano Silva6009SAO PAULO62140510wkD2OabgKx63048F31"
+      : "00020126580014BR.GOV.BCB.PIX0136706b3ecb-d405-4b4a-883f-f35a167b06b35204000053039865802BR5913Adriano Silva6009SAO PAULO62140510wkD2OabgKx63048F31"
   );
   
   // Valores para exibição
