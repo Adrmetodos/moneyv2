@@ -16,7 +16,7 @@ const PagamentoPix = () => {
   const planoParam = searchParams.get('plano') || 'premium';
   
   const [pixCode, setPixCode] = useState(
-    codigoParam || "00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com52040000530398654041.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD"
+    codigoParam || "00020126580014BR.GOV.BCB.PIX0136f5f7a868-e769-4bdb-b9ab-8d38d3c97ff952040000530398654019700.005802BR5925METODOS INFALIVES LTDA6009SAO PAULO62070503***63041DBC"
   );
   const [valorExibicao, setValorExibicao] = useState(valorParam || "197,00");
   const [valorNumerico, setValorNumerico] = useState(() => {
