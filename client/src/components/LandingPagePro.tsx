@@ -68,14 +68,14 @@ const LandingPagePro = () => {
     const valorFormatado = plano === "197" ? "197,00" : "64,90";
     const tipoPlano = plano === "197" ? "premium" : "basico";
     
-    // Código PIX para pagamento tradicional
-    const pixCode =
-      plano === "197"
-        ? "00020126580014BR.GOV.BCB.PIX0136a92808641-gmail-com-key-pix-personal52040000530398654019700.005802BR5913Adriano Silva6009SAO PAULO62140510wkD2OabgPix63048F31"
-        : "00020126580014BR.GOV.BCB.PIX0136a92808641-gmail-com-key-pix-personal52040000530398654006490.005802BR5913Adriano Silva6009SAO PAULO62140510wkD2OabgPix63048F31";
+    // Usar diretamente a chave PIX como email
+    const pixChave = "a92808641@gmail.com";
+    
+    // Redirecionando para a página de pagamento PIX com a chave direta
+    const valorNumerico = plano === "197" ? 197.00 : 64.90;
     
     // Redirecionando para a página de pagamento PIX
-    window.location.href = `/pagamentopix?codigo=${encodeURIComponent(pixCode)}&valor=${valorFormatado}&plano=${tipoPlano}`;
+    window.location.href = `/pagamentopix?valor=${valorFormatado}&plano=${tipoPlano}`;
   };
   
   // Função de pagamento com cartão removida - usando apenas PIX agora

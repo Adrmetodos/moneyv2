@@ -11,13 +11,14 @@ const incrementarCopias = () => {
 const PagamentoPix = () => {
   const [location, navigate] = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
-  const codigoParam = searchParams.get('codigo');
+  
+  // Detecta parâmetros da URL
+  const chaveParam = searchParams.get('chave');
   const valorParam = searchParams.get('valor');
   const planoParam = searchParams.get('plano') || 'premium';
   
-  const [pixCode, setPixCode] = useState(
-    codigoParam || "00020126580014BR.GOV.BCB.PIX0136a92808641-gmail-com-key-pix-personal52040000530398654019700.005802BR5913Adriano Silva6009SAO PAULO62140510wkD2OabgPix63048F31"
-  );
+  // Usa os parâmetros ou valores padrão
+  const [pixChave] = useState("a92808641@gmail.com");
   const [valorExibicao, setValorExibicao] = useState(valorParam || "197,00");
   const [valorNumerico, setValorNumerico] = useState(() => {
     if (valorParam) {
@@ -28,13 +29,11 @@ const PagamentoPix = () => {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(pixCode);
+    navigator.clipboard.writeText(pixChave);
     incrementarCopias(); // Incrementa contador de cópias
     setCopied(true);
     setTimeout(() => setCopied(false), 3000);
   };
-  
-  // Função de navegação removida - não usamos mais pagamento com cartão
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white flex flex-col items-center p-4 md:p-10">
@@ -48,7 +47,7 @@ const PagamentoPix = () => {
       </motion.h1>
 
       <p className="text-lg mb-6 text-center max-w-2xl">
-        Escaneie o QR Code abaixo para realizar o pagamento e liberar o acesso exclusivo!
+        Faça um PIX para a chave abaixo para liberar o acesso exclusivo!
       </p>
 
       <motion.div
@@ -61,21 +60,24 @@ const PagamentoPix = () => {
           Valor a pagar: R${valorExibicao}
         </div>
 
-        <img
-          src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCode)}`}
-          alt="QR Code Pix"
-          className="mb-6 rounded-lg border-4 border-gray-700"
-        />
+        <div className="p-5 bg-white rounded-lg mb-6">
+          <img
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixChave)}`}
+            alt="QR Code Pix"
+            className="rounded-lg"
+          />
+        </div>
 
-        <div className="text-sm bg-gray-900 p-4 rounded-md w-full max-w-md mb-4 break-all">
-          <p className="select-all text-center text-gray-300">{pixCode}</p>
+        <div className="text-sm bg-gray-900 p-4 rounded-md w-full max-w-md mb-4">
+          <p className="text-center text-gray-300 mb-1">Chave PIX (Email):</p>
+          <p className="select-all text-center text-white font-bold">{pixChave}</p>
         </div>
 
         <Button 
           onClick={copyToClipboard}
           className={`${copied ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'} text-white px-4 py-2`}
         >
-          {copied ? '✅ Código copiado!' : 'Copiar código PIX'}
+          {copied ? '✅ Chave copiada!' : 'Copiar chave PIX'}
         </Button>
       </motion.div>
 
@@ -84,13 +86,12 @@ const PagamentoPix = () => {
         <ol className="list-decimal pl-5 space-y-2 text-gray-300">
           <li>Abra o aplicativo do seu banco</li>
           <li>Acesse a opção de pagamento via PIX</li>
-          <li>Escaneie o QR Code ou copie e cole o código acima</li>
-          <li>Confira o valor de <strong className="text-green-500">R${valorExibicao}</strong> e confirme o pagamento</li>
+          <li>Escolha a opção "PIX com chave"</li>
+          <li>Cole a chave de email copiada acima</li>
+          <li>Insira o valor de <strong className="text-green-500">R${valorExibicao}</strong> e confirme o pagamento</li>
           <li>Após o pagamento, você receberá o acesso em até 5 minutos</li>
         </ol>
       </div>
-
-      {/* Seção de pagamento alternativo removida */}
 
       <div className="bg-red-700 text-white p-4 rounded-xl text-center mt-4 mb-8 max-w-xl w-full animate-pulse">
         🔥 <strong>ATENÇÃO!</strong> Oferta válida apenas nas próximas 24 horas!
