@@ -74,8 +74,8 @@ const LandingPagePro = () => {
         ? "00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com5204000053039865404197.005802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD"
         : "00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com520400005303986540464.905802BR5920Adriano Silva6009SAO PAULO61080540900062070503***6304ABCD";
     
-    // Redirecionando para a página de pagamento com opções de PIX e cartão
-    window.location.href = `/pagamento?codigo=${encodeURIComponent(pixCode)}&valor=${valorFormatado}&plano=${tipoPlano}`;
+    // Redirecionando para a página de pagamento PIX
+    window.location.href = `/pagamentopix?codigo=${encodeURIComponent(pixCode)}&valor=${valorFormatado}&plano=${tipoPlano}`;
   };
   
   const handleStripePayment = async (valor: string) => {
@@ -417,22 +417,6 @@ const LandingPagePro = () => {
               >
                 QUERO TER ACESSO COM PIX
               </Button>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                <Button
-                  onClick={() => handleStripePayment('19700')}
-                  className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg rounded-full shadow-lg transform transition-all hover:scale-105"
-                >
-                  PAGAR COM CARTÃO - R$197,00
-                </Button>
-
-                <Button
-                  onClick={() => handleStripePayment('6490')}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg rounded-full shadow-lg transform transition-all hover:scale-105"
-                >
-                  PAGAR COM CARTÃO - R$64,90
-                </Button>
-              </div>
               
               <div className="mt-4 flex justify-center space-x-4 text-sm text-gray-400">
                 <span className="flex items-center">
