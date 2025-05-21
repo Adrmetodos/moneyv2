@@ -71,8 +71,8 @@ const LandingPagePro = () => {
     // Código PIX para pagamento tradicional
     const pixCode =
       plano === "197"
-        ? "00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com52040000530398654019700.005802BR5920METODOS INFALIVES LTDA6009SAO PAULO62070503***6304E78C"
-        : "00020126360014BR.GOV.BCB.PIX0115a92808641@gmail.com52040000530398654006490.005802BR5920METODOS INFALIVES LTDA6009SAO PAULO62070503***6304D4B1";
+        ? "00020126580014BR.GOV.BCB.PIX0136a92808641-gmail-com-key-pix-personal52040000530398654019700.005802BR5913Adriano Silva6009SAO PAULO62140510wkD2OabgPix63048F31"
+        : "00020126580014BR.GOV.BCB.PIX0136a92808641-gmail-com-key-pix-personal52040000530398654006490.005802BR5913Adriano Silva6009SAO PAULO62140510wkD2OabgPix63048F31";
     
     // Redirecionando para a página de pagamento PIX
     window.location.href = `/pagamentopix?codigo=${encodeURIComponent(pixCode)}&valor=${valorFormatado}&plano=${tipoPlano}`;
