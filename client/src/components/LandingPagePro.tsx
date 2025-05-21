@@ -78,57 +78,7 @@ const LandingPagePro = () => {
     window.location.href = `/pagamentopix?codigo=${encodeURIComponent(pixCode)}&valor=${valorFormatado}&plano=${tipoPlano}`;
   };
   
-  const handleStripePayment = async (valor: string) => {
-    try {
-      console.log("Iniciando pagamento com Stripe...", valor);
-      
-      // Registrar clique no plano correspondente
-      if (valor === '19700') {
-        incrementarClique197();
-      } else {
-        incrementarClique6490();
-      }
-      
-      // Use a rota de pagamento correta
-      const response = await fetch('/api/create-checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ valor }),
-      });
-
-      console.log("Resposta recebida:", response.status);
-      
-      if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
-      }
-      
-      // Processar a resposta com tratamento adequado
-      const respText = await response.text();
-      
-      try {
-        // Tenta analisar o texto da resposta como JSON
-        const data = JSON.parse(respText);
-        console.log("Dados recebidos:", data);
-        
-        if (data.url) {
-          console.log("Redirecionando para:", data.url);
-          // Abrir em nova janela em vez de redirecionar
-          window.open(data.url, '_blank');
-        } else {
-          console.error("Erro: URL de checkout não encontrada na resposta", data);
-          alert("Erro ao gerar pagamento! Verifique seu conexão e tente novamente.");
-        }
-      } catch (parseError) {
-        console.error("Erro ao analisar resposta:", parseError, "Texto da resposta:", respText);
-        alert("Erro ao processar a resposta do servidor. Tente novamente mais tarde.");
-      }
-    } catch (error) {
-      console.error("Erro ao processar pagamento:", error);
-      alert("Erro ao processar o pagamento. Tente novamente mais tarde.");
-    }
-  };
+  // Função de pagamento com cartão removida - usando apenas PIX agora
   
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
