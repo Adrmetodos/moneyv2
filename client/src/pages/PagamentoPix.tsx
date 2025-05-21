@@ -16,21 +16,25 @@ const PagamentoPix = () => {
   const valorParam = searchParams.get('valor');
   const planoParam = searchParams.get('plano') || 'premium';
   
-  // Código PIX completo para cópia - usando a chave aleatória fornecida
-  const [pixCode, setPixCode] = useState(
-    planoParam === 'premium' 
-      ? "00020126580014BR.GOV.BCB.PIX0136706b3ecb-d405-4b4a-883f-f35a167b06b35204000053039865802BR5913Adriano Silva6009SAO PAULO62140510wkD2OabgKx63048F31"
-      : "00020126580014BR.GOV.BCB.PIX0136706b3ecb-d405-4b4a-883f-f35a167b06b35204000053039865802BR5913Adriano Silva6009SAO PAULO62140510wkD2OabgKx63048F31"
-  );
-  
-  // Valores para exibição
-  const [valorExibicao, setValorExibicao] = useState(valorParam || (planoParam === 'premium' ? "197,00" : "64,90"));
+  // Determinando o valor numérico
   const [valorNumerico, setValorNumerico] = useState(() => {
     if (valorParam) {
       return parseFloat(valorParam.replace(',', '.'));
     }
     return planoParam === 'premium' ? 197 : 64.90;
   });
+  
+  // Valor para exibição
+  const [valorExibicao, setValorExibicao] = useState(valorParam || (planoParam === 'premium' ? "197,00" : "64,90"));
+  
+  // Código PIX com o valor correto para o plano premium (R$197,00)
+  const premiumPixCode = "00020126580014BR.GOV.BCB.PIX0136706b3ecb-d405-4b4a-883f-f35a167b06b35204000053039865406197.005802BR5913Adriano Silva6009SAO PAULO62140510wkD2OabgKx63048F31";
+  
+  // Código PIX com o valor correto para o plano básico (R$64,90)
+  const basicPixCode = "00020126580014BR.GOV.BCB.PIX0136706b3ecb-d405-4b4a-883f-f35a167b06b35204000053039865406064.905802BR5913Adriano Silva6009SAO PAULO62140510wkD2OabgKx63048F31";
+  
+  // Seleciona o código PIX com base no plano
+  const [pixCode, setPixCode] = useState(planoParam === 'premium' ? premiumPixCode : basicPixCode);
   
   const [copied, setCopied] = useState(false);
 
@@ -94,7 +98,7 @@ const PagamentoPix = () => {
           <li>Acesse a opção de pagamento via PIX</li>
           <li>Escolha a opção "PIX Copia e Cola"</li>
           <li>Cole o código copiado acima</li>
-          <li>Confira o valor de <strong className="text-green-500">R${valorExibicao}</strong> e confirme o pagamento</li>
+          <li>Confirme que o valor <strong className="text-green-500">R${valorExibicao}</strong> aparece no app do banco</li>
           <li>Após o pagamento, você receberá o acesso em até 5 minutos</li>
         </ol>
       </div>
