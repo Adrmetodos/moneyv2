@@ -13,23 +13,29 @@ const PagamentoPix = () => {
   const searchParams = new URLSearchParams(window.location.search);
   
   // Detecta parâmetros da URL
-  const chaveParam = searchParams.get('chave');
   const valorParam = searchParams.get('valor');
   const planoParam = searchParams.get('plano') || 'premium';
   
-  // Usa os parâmetros ou valores padrão
-  const [pixChave] = useState("a92808641@gmail.com");
-  const [valorExibicao, setValorExibicao] = useState(valorParam || "197,00");
+  // Código PIX completo para cópia
+  const [pixCode, setPixCode] = useState(
+    planoParam === 'premium' 
+      ? "00020126580014BR.GOV.BCB.PIX01116599241957152040000530398654019700.005802BR5913Adriano Silva6009SAO PAULO62070503***63041DBC"
+      : "00020126580014BR.GOV.BCB.PIX01116599241957152040000530398654006490.005802BR5913Adriano Silva6009SAO PAULO62070503***63041DBC"
+  );
+  
+  // Valores para exibição
+  const [valorExibicao, setValorExibicao] = useState(valorParam || (planoParam === 'premium' ? "197,00" : "64,90"));
   const [valorNumerico, setValorNumerico] = useState(() => {
     if (valorParam) {
       return parseFloat(valorParam.replace(',', '.'));
     }
     return planoParam === 'premium' ? 197 : 64.90;
   });
+  
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(pixChave);
+    navigator.clipboard.writeText(pixCode);
     incrementarCopias(); // Incrementa contador de cópias
     setCopied(true);
     setTimeout(() => setCopied(false), 3000);
@@ -47,11 +53,11 @@ const PagamentoPix = () => {
       </motion.h1>
 
       <p className="text-lg mb-6 text-center max-w-2xl">
-        Faça um PIX para a chave abaixo para liberar o acesso exclusivo!
+        Escaneie o QR Code abaixo ou copie o código PIX para realizar o pagamento!
       </p>
 
       <motion.div
-        className="bg-gray-800 p-6 rounded-xl mb-8 flex flex-col items-center"
+        className="bg-gray-800 p-6 rounded-xl mb-8 flex flex-col items-center w-full max-w-lg"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
@@ -62,22 +68,22 @@ const PagamentoPix = () => {
 
         <div className="p-5 bg-white rounded-lg mb-6">
           <img
-            src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixChave)}`}
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCode)}`}
             alt="QR Code Pix"
             className="rounded-lg"
           />
         </div>
 
-        <div className="text-sm bg-gray-900 p-4 rounded-md w-full max-w-md mb-4">
-          <p className="text-center text-gray-300 mb-1">Chave PIX (Email):</p>
-          <p className="select-all text-center text-white font-bold">{pixChave}</p>
+        <div className="text-sm bg-gray-900 p-4 rounded-md w-full mb-4 overflow-hidden">
+          <p className="text-center text-gray-300 mb-1">Código PIX Copia e Cola:</p>
+          <p className="select-all text-center text-white font-medium break-all">{pixCode}</p>
         </div>
 
         <Button 
           onClick={copyToClipboard}
-          className={`${copied ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'} text-white px-4 py-2`}
+          className={`${copied ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'} text-white px-4 py-2 w-full`}
         >
-          {copied ? '✅ Chave copiada!' : 'Copiar chave PIX'}
+          {copied ? '✅ Código copiado!' : 'Copiar código PIX'}
         </Button>
       </motion.div>
 
@@ -86,9 +92,9 @@ const PagamentoPix = () => {
         <ol className="list-decimal pl-5 space-y-2 text-gray-300">
           <li>Abra o aplicativo do seu banco</li>
           <li>Acesse a opção de pagamento via PIX</li>
-          <li>Escolha a opção "PIX com chave"</li>
-          <li>Cole a chave de email copiada acima</li>
-          <li>Insira o valor de <strong className="text-green-500">R${valorExibicao}</strong> e confirme o pagamento</li>
+          <li>Escolha a opção "PIX Copia e Cola"</li>
+          <li>Cole o código copiado acima</li>
+          <li>Confira o valor de <strong className="text-green-500">R${valorExibicao}</strong> e confirme o pagamento</li>
           <li>Após o pagamento, você receberá o acesso em até 5 minutos</li>
         </ol>
       </div>

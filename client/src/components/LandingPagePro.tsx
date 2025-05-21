@@ -68,12 +68,6 @@ const LandingPagePro = () => {
     const valorFormatado = plano === "197" ? "197,00" : "64,90";
     const tipoPlano = plano === "197" ? "premium" : "basico";
     
-    // Usar diretamente a chave PIX como email
-    const pixChave = "a92808641@gmail.com";
-    
-    // Redirecionando para a página de pagamento PIX com a chave direta
-    const valorNumerico = plano === "197" ? 197.00 : 64.90;
-    
     // Redirecionando para a página de pagamento PIX
     window.location.href = `/pagamentopix?valor=${valorFormatado}&plano=${tipoPlano}`;
   };
