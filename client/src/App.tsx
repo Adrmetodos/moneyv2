@@ -7,7 +7,6 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import PagamentoPix from "@/pages/PagamentoPix";
 import Dashboard from "@/pages/Dashboard";
-import Checkout from "@/pages/Checkout";
 import Sucesso from "@/pages/Sucesso";
 import Cancelado from "@/pages/Cancelado";
 
@@ -16,7 +15,6 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/pagamentopix" component={PagamentoPix} />
-      <Route path="/checkout" component={Checkout} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/sucesso" component={Sucesso} />
       <Route path="/cancelado" component={Cancelado} />
