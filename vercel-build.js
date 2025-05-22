@@ -1,6 +1,7 @@
 // Este script é executado pela Vercel durante o processo de build
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 // Função para criar a estrutura de pastas necessária
 function createDirectoryIfNotExists(dir) {
@@ -10,13 +11,41 @@ function createDirectoryIfNotExists(dir) {
   }
 }
 
+console.log('Iniciando build personalizado para Vercel...');
+
 // Diretório de saída definido no vercel.json
 const outputDir = path.join(__dirname, 'dist/public');
 createDirectoryIfNotExists(outputDir);
 
-// Criar um arquivo index.html simples para evitar tela branca
-const indexPath = path.join(outputDir, 'index.html');
-if (!fs.existsSync(indexPath)) {
+try {
+  // Pular a compilação do vite.config.ts problemático
+  console.log('Configurando ambiente...');
+  process.env.SKIP_VITE_CONFIG_TS = 'true';
+  
+  // Compilar o client com esbuild em vez do vite
+  console.log('Compilando client com esbuild...');
+  execSync('esbuild client/src/main.tsx --bundle --format=esm --outdir=dist/public --loader:.tsx=tsx --loader:.ts=ts --sourcemap --minify', { stdio: 'inherit' });
+  
+  // Copiar o index.html para o diretório de saída
+  console.log('Copiando index.html...');
+  fs.copyFileSync('client/index.html', path.join(outputDir, 'index.html'));
+  
+  // Copiar arquivos CSS
+  console.log('Copiando arquivos de estilo...');
+  fs.copyFileSync('client/src/index.css', path.join(outputDir, 'index.css'));
+  
+  // Compilar o servidor
+  console.log('Compilando servidor com esbuild...');
+  execSync('esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist', { stdio: 'inherit' });
+  
+  console.log('Build concluído com sucesso!');
+} catch (error) {
+  console.error('Erro durante o build:', error);
+  process.exit(1);
+}
+
+// Criar arquivo index.html de fallback caso necessário
+if (!fs.existsSync(path.join(outputDir, 'index.html'))) {
   const htmlContent = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -89,8 +118,8 @@ if (!fs.existsSync(indexPath)) {
 </body>
 </html>`;
   
-  fs.writeFileSync(indexPath, htmlContent);
-  console.log(`Arquivo criado: ${indexPath}`);
+  fs.writeFileSync(path.join(outputDir, 'index.html'), htmlContent);
+  console.log(`Arquivo fallback criado: ${path.join(outputDir, 'index.html')}`);
 }
 
 console.log('Script de build para Vercel concluído com sucesso!');
