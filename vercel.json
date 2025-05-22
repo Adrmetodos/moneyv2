@@ -1,15 +1,14 @@
 {
-  "framework": null,
-  "buildCommand": "node vercel-build.js",
-  "outputDirectory": "dist/public",
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "public": true,
-
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html", "status": 200 }
-  ],
-  "github": {
-    "silent": true
-  }
+  "redirects": [
+    {
+      "source": "/pagamento",
+      "destination": "/checkout",
+      "permanent": true
+    },
+    {
+      "source": "/vip",
+      "destination": "/grupo-exclusivo",
+      "permanent": false
+    }
+  ]
 }
