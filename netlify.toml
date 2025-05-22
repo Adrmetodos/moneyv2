@@ -1,6 +1,6 @@
 [build]
-  command = "npm run build"
   publish = "dist/public"
+  command = "node vercel-build.js"
 
 [[redirects]]
   from = "/*"

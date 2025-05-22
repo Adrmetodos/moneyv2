@@ -2,13 +2,14 @@
   "framework": null,
   "buildCommand": "node vercel-build.js",
   "outputDirectory": "dist/public",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "public": true,
   "routes": [
     { "handle": "filesystem" },
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    { "src": "/(.*)", "dest": "/index.html", "status": 200 }
   ],
-  "env": {
-    "NODE_ENV": "production",
-    "SKIP_VITE_CONFIG_TS": "true"
+  "github": {
+    "silent": true
   }
 }
