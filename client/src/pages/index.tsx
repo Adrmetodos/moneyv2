@@ -3,12 +3,9 @@ const [erro, setErro] = useState("");
 
 import '../styles/globals.css';
 import { useState } from 'react';
-<<<<<<< HEAD
-import { motion } from 'framer-motion'
-=======
 import { motion } from 'framer-motion';
->>>>>>> 77e8a522ef328d11a8482dcbf5b44b8164ce88e8
 import Head from 'next/head';
+
 
 const LandingPagePro = () => {
   const [showMethods, setShowMethods] = useState(false);
