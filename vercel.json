@@ -1,14 +1,10 @@
 {
-  "redirects": [
-    {
-      "source": "/pagamento",
-      "destination": "/checkout",
-      "permanent": true
-    },
-    {
-      "source": "/vip",
-      "destination": "/grupo-exclusivo",
-      "permanent": false
-    }
-  ]
+  "version": 2,
+  "buildCommand": null,
+  "devCommand": null,
+  "installCommand": null,
+  "framework": null,
+  "outputDirectory": ".",
+  "public": true,
+  "cleanUrls": true
 }
